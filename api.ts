@@ -39,8 +39,7 @@ import {
   operationServerMap,
 } from "./base";
 
-type NullTime = any;
-
+export type NullTime = any;
 /**
  * Patch identities response
  * @export
@@ -3824,38 +3823,90 @@ export const CourierApiFactory = function (
     /**
      * Gets a specific messages by the given ID.
      * @summary Get a Message
-     * @param {string} id MessageID is the ID of the message.
+     * @param {CourierApiGetCourierMessageRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getCourierMessage(id: string, options?: any): AxiosPromise<Message> {
+    getCourierMessage(
+      requestParameters: CourierApiGetCourierMessageRequest,
+      options?: AxiosRequestConfig
+    ): AxiosPromise<Message> {
       return localVarFp
-        .getCourierMessage(id, options)
+        .getCourierMessage(requestParameters.id, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * Lists all messages by given status and recipient.
      * @summary List Messages
-     * @param {number} [pageSize] Items per Page  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {number} [status] Status filters out messages based on status. If no value is provided, it doesn\&#39;t take effect on filter.
-     * @param {string} [recipient] Recipient filters out messages based on recipient. If no value is provided, it doesn\&#39;t take effect on filter.
+     * @param {CourierApiListCourierMessagesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listCourierMessages(
-      pageSize?: number,
-      pageToken?: string,
-      status?: number,
-      recipient?: string,
-      options?: any
+      requestParameters: CourierApiListCourierMessagesRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<Array<Message>> {
       return localVarFp
-        .listCourierMessages(pageSize, pageToken, status, recipient, options)
+        .listCourierMessages(
+          requestParameters.pageSize,
+          requestParameters.pageToken,
+          requestParameters.status,
+          requestParameters.recipient,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
   };
 };
+
+/**
+ * Request parameters for getCourierMessage operation in CourierApi.
+ * @export
+ * @interface CourierApiGetCourierMessageRequest
+ */
+export interface CourierApiGetCourierMessageRequest {
+  /**
+   * MessageID is the ID of the message.
+   * @type {string}
+   * @memberof CourierApiGetCourierMessage
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for listCourierMessages operation in CourierApi.
+ * @export
+ * @interface CourierApiListCourierMessagesRequest
+ */
+export interface CourierApiListCourierMessagesRequest {
+  /**
+   * Items per Page  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {number}
+   * @memberof CourierApiListCourierMessages
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {string}
+   * @memberof CourierApiListCourierMessages
+   */
+  readonly pageToken?: string;
+
+  /**
+   * Status filters out messages based on status. If no value is provided, it doesn\&#39;t take effect on filter.
+   * @type {number}
+   * @memberof CourierApiListCourierMessages
+   */
+  readonly status?: number;
+
+  /**
+   * Recipient filters out messages based on recipient. If no value is provided, it doesn\&#39;t take effect on filter.
+   * @type {string}
+   * @memberof CourierApiListCourierMessages
+   */
+  readonly recipient?: string;
+}
 
 /**
  * CourierApi - object-oriented interface
@@ -3867,37 +3918,40 @@ export class CourierApi extends BaseAPI {
   /**
    * Gets a specific messages by the given ID.
    * @summary Get a Message
-   * @param {string} id MessageID is the ID of the message.
+   * @param {CourierApiGetCourierMessageRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof CourierApi
    */
-  public getCourierMessage(id: string, options?: AxiosRequestConfig) {
+  public getCourierMessage(
+    requestParameters: CourierApiGetCourierMessageRequest,
+    options?: AxiosRequestConfig
+  ) {
     return CourierApiFp(this.configuration)
-      .getCourierMessage(id, options)
+      .getCourierMessage(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Lists all messages by given status and recipient.
    * @summary List Messages
-   * @param {number} [pageSize] Items per Page  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {number} [status] Status filters out messages based on status. If no value is provided, it doesn\&#39;t take effect on filter.
-   * @param {string} [recipient] Recipient filters out messages based on recipient. If no value is provided, it doesn\&#39;t take effect on filter.
+   * @param {CourierApiListCourierMessagesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof CourierApi
    */
   public listCourierMessages(
-    pageSize?: number,
-    pageToken?: string,
-    status?: number,
-    recipient?: string,
+    requestParameters: CourierApiListCourierMessagesRequest = {},
     options?: AxiosRequestConfig
   ) {
     return CourierApiFp(this.configuration)
-      .listCourierMessages(pageSize, pageToken, status, recipient, options)
+      .listCourierMessages(
+        requestParameters.pageSize,
+        requestParameters.pageToken,
+        requestParameters.status,
+        requestParameters.recipient,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -6647,32 +6701,22 @@ export const FrontendApiFactory = function (
     /**
      * This endpoint initializes a browser-based user login flow. This endpoint will set the appropriate cookies and anti-CSRF measures required for browser-based flows.  If this endpoint is opened as a link in the browser, it will be redirected to `selfservice.flows.login.ui_url` with the flow ID set as the query parameter `?flow=`. If a valid user session exists already, the browser will be redirected to `urls.default_redirect_url` unless the query parameter `?refresh=true` was set.  If this endpoint is called via an AJAX request, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `session_aal1_required`: Multi-factor auth (e.g. 2fa) was requested but the user has no session yet. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration!  The optional query parameter login_challenge is set when using Kratos with Hydra in an OAuth2 flow. See the oauth2_provider.url configuration option.  This endpoint is NOT INTENDED for clients that do not have a browser (Chrome, Firefox, ...) as cookies are needed.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
      * @summary Create Login Flow for Browsers
-     * @param {boolean} [refresh] Refresh a login session  If set to true, this will refresh an existing login session by asking the user to sign in again. This will reset the authenticated_at time of the session.
-     * @param {string} [aal] Request a Specific AuthenticationMethod Assurance Level  Use this parameter to upgrade an existing session\&#39;s authenticator assurance level (AAL). This allows you to ask for multi-factor authentication. When an identity sign in using e.g. username+password, the AAL is 1. If you wish to \&quot;upgrade\&quot; the session\&#39;s security by asking the user to perform TOTP / WebAuth/ ... you would set this to \&quot;aal2\&quot;.
-     * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
-     * @param {string} [loginChallenge] An optional Hydra login challenge. If present, Kratos will cooperate with Ory Hydra to act as an OAuth2 identity provider.  The value for this parameter comes from &#x60;login_challenge&#x60; URL Query parameter sent to your application (e.g. &#x60;/login?login_challenge&#x3D;abcde&#x60;).
-     * @param {string} [organization] An optional organization ID that should be used for logging this user in. This parameter is only effective in the Ory Network.
+     * @param {FrontendApiCreateBrowserLoginFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createBrowserLoginFlow(
-      refresh?: boolean,
-      aal?: string,
-      returnTo?: string,
-      cookie?: string,
-      loginChallenge?: string,
-      organization?: string,
-      options?: any
+      requestParameters: FrontendApiCreateBrowserLoginFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<LoginFlow> {
       return localVarFp
         .createBrowserLoginFlow(
-          refresh,
-          aal,
-          returnTo,
-          cookie,
-          loginChallenge,
-          organization,
+          requestParameters.refresh,
+          requestParameters.aal,
+          requestParameters.returnTo,
+          requestParameters.cookie,
+          requestParameters.loginChallenge,
+          requestParameters.organization,
           options
         )
         .then((request) => request(axios, basePath));
@@ -6680,58 +6724,54 @@ export const FrontendApiFactory = function (
     /**
      * This endpoint initializes a browser-based user logout flow and a URL which can be used to log out the user.  This endpoint is NOT INTENDED for API clients and only works with browsers (Chrome, Firefox, ...). For API clients you can call the `/self-service/logout/api` URL directly with the Ory Session Token.  The URL is only valid for the currently signed in user. If no user is signed in, this endpoint returns a 401 error.  When calling this endpoint from a backend, please ensure to properly forward the HTTP cookies.
      * @summary Create a Logout URL for Browsers
-     * @param {string} [cookie] HTTP Cookies  If you call this endpoint from a backend, please include the original Cookie header in the request.
-     * @param {string} [returnTo] Return to URL  The URL to which the browser should be redirected to after the logout has been performed.
+     * @param {FrontendApiCreateBrowserLogoutFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createBrowserLogoutFlow(
-      cookie?: string,
-      returnTo?: string,
-      options?: any
+      requestParameters: FrontendApiCreateBrowserLogoutFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<LogoutFlow> {
       return localVarFp
-        .createBrowserLogoutFlow(cookie, returnTo, options)
+        .createBrowserLogoutFlow(
+          requestParameters.cookie,
+          requestParameters.returnTo,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint initializes a browser-based account recovery flow. Once initialized, the browser will be redirected to `selfservice.flows.recovery.ui_url` with the flow ID set as the query parameter `?flow=`. If a valid user session exists, the browser is returned to the configured return URL.  If this endpoint is called via an AJAX request, the response contains the recovery flow without any redirects or a 400 bad request error if the user is already authenticated.  This endpoint is NOT INTENDED for clients that do not have a browser (Chrome, Firefox, ...) as cookies are needed.  More information can be found at [Ory Kratos Account Recovery Documentation](../self-service/flows/account-recovery).
      * @summary Create Recovery Flow for Browsers
-     * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
+     * @param {FrontendApiCreateBrowserRecoveryFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createBrowserRecoveryFlow(
-      returnTo?: string,
-      options?: any
+      requestParameters: FrontendApiCreateBrowserRecoveryFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<RecoveryFlow> {
       return localVarFp
-        .createBrowserRecoveryFlow(returnTo, options)
+        .createBrowserRecoveryFlow(requestParameters.returnTo, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint initializes a browser-based user registration flow. This endpoint will set the appropriate cookies and anti-CSRF measures required for browser-based flows.  If this endpoint is opened as a link in the browser, it will be redirected to `selfservice.flows.registration.ui_url` with the flow ID set as the query parameter `?flow=`. If a valid user session exists already, the browser will be redirected to `urls.default_redirect_url`.  If this endpoint is called via an AJAX request, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration!  If this endpoint is called via an AJAX request, the response contains the registration flow without a redirect.  This endpoint is NOT INTENDED for clients that do not have a browser (Chrome, Firefox, ...) as cookies are needed.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
      * @summary Create Registration Flow for Browsers
-     * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
-     * @param {string} [loginChallenge] Ory OAuth 2.0 Login Challenge.  If set will cooperate with Ory OAuth2 and OpenID to act as an OAuth2 server / OpenID Provider.  The value for this parameter comes from &#x60;login_challenge&#x60; URL Query parameter sent to your application (e.g. &#x60;/registration?login_challenge&#x3D;abcde&#x60;).  This feature is compatible with Ory Hydra when not running on the Ory Network.
-     * @param {string} [afterVerificationReturnTo] The URL to return the browser to after the verification flow was completed.  After the registration flow is completed, the user will be sent a verification email. Upon completing the verification flow, this URL will be used to override the default &#x60;selfservice.flows.verification.after.default_redirect_to&#x60; value.
-     * @param {string} [organization]
+     * @param {FrontendApiCreateBrowserRegistrationFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createBrowserRegistrationFlow(
-      returnTo?: string,
-      loginChallenge?: string,
-      afterVerificationReturnTo?: string,
-      organization?: string,
-      options?: any
+      requestParameters: FrontendApiCreateBrowserRegistrationFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<RegistrationFlow> {
       return localVarFp
         .createBrowserRegistrationFlow(
-          returnTo,
-          loginChallenge,
-          afterVerificationReturnTo,
-          organization,
+          requestParameters.returnTo,
+          requestParameters.loginChallenge,
+          requestParameters.afterVerificationReturnTo,
+          requestParameters.organization,
           options
         )
         .then((request) => request(axios, basePath));
@@ -6739,61 +6779,55 @@ export const FrontendApiFactory = function (
     /**
      * This endpoint initializes a browser-based user settings flow. Once initialized, the browser will be redirected to `selfservice.flows.settings.ui_url` with the flow ID set as the query parameter `?flow=`. If no valid Ory Kratos Session Cookie is included in the request, a login flow will be initialized.  If this endpoint is opened as a link in the browser, it will be redirected to `selfservice.flows.settings.ui_url` with the flow ID set as the query parameter `?flow=`. If no valid user session was set, the browser will be redirected to the login endpoint.  If this endpoint is called via an AJAX request, the response contains the settings flow without any redirects or a 401 forbidden error if no valid session was set.  Depending on your configuration this endpoint might return a 403 error if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor (happens automatically for server-side browser flows) or change the configuration.  If this endpoint is called via an AJAX request, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `session_inactive`: No Ory Session was found - sign in a user first. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration!  This endpoint is NOT INTENDED for clients that do not have a browser (Chrome, Firefox, ...) as cookies are needed.  More information can be found at [Ory Kratos User Settings & Profile Management Documentation](../self-service/flows/user-settings).
      * @summary Create Settings Flow for Browsers
-     * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiCreateBrowserSettingsFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createBrowserSettingsFlow(
-      returnTo?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiCreateBrowserSettingsFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<SettingsFlow> {
       return localVarFp
-        .createBrowserSettingsFlow(returnTo, cookie, options)
+        .createBrowserSettingsFlow(
+          requestParameters.returnTo,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint initializes a browser-based account verification flow. Once initialized, the browser will be redirected to `selfservice.flows.verification.ui_url` with the flow ID set as the query parameter `?flow=`.  If this endpoint is called via an AJAX request, the response contains the recovery flow without any redirects.  This endpoint is NOT INTENDED for API clients and only works with browsers (Chrome, Firefox, ...).  More information can be found at [Ory Kratos Email and Phone Verification Documentation](https://www.ory.sh/docs/kratos/self-service/flows/verify-email-account-activation).
      * @summary Create Verification Flow for Browser Clients
-     * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
+     * @param {FrontendApiCreateBrowserVerificationFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createBrowserVerificationFlow(
-      returnTo?: string,
-      options?: any
+      requestParameters: FrontendApiCreateBrowserVerificationFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<VerificationFlow> {
       return localVarFp
-        .createBrowserVerificationFlow(returnTo, options)
+        .createBrowserVerificationFlow(requestParameters.returnTo, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint initiates a login flow for native apps that do not use a browser, such as mobile devices, smart TVs, and so on.  If a valid provided session cookie or session token is provided, a 400 Bad Request error will be returned unless the URL query parameter `?refresh=true` is set.  To fetch an existing login flow call `/self-service/login/flows?flow=<flow_id>`.  You MUST NOT use this endpoint in client-side (Single Page Apps, ReactJS, AngularJS) nor server-side (Java Server Pages, NodeJS, PHP, Golang, ...) browser applications. Using this endpoint in these applications will make you vulnerable to a variety of CSRF attacks, including CSRF login attacks.  In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `session_aal1_required`: Multi-factor auth (e.g. 2fa) was requested but the user has no session yet. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred.  This endpoint MUST ONLY be used in scenarios such as native mobile apps (React Native, Objective C, Swift, Java, ...).  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
      * @summary Create Login Flow for Native Apps
-     * @param {boolean} [refresh] Refresh a login session  If set to true, this will refresh an existing login session by asking the user to sign in again. This will reset the authenticated_at time of the session.
-     * @param {string} [aal] Request a Specific AuthenticationMethod Assurance Level  Use this parameter to upgrade an existing session\&#39;s authenticator assurance level (AAL). This allows you to ask for multi-factor authentication. When an identity sign in using e.g. username+password, the AAL is 1. If you wish to \&quot;upgrade\&quot; the session\&#39;s security by asking the user to perform TOTP / WebAuth/ ... you would set this to \&quot;aal2\&quot;.
-     * @param {string} [xSessionToken] The Session Token of the Identity performing the settings flow.
-     * @param {boolean} [returnSessionTokenExchangeCode] EnableSessionTokenExchangeCode requests the login flow to include a code that can be used to retrieve the session token after the login flow has been completed.
-     * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
+     * @param {FrontendApiCreateNativeLoginFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createNativeLoginFlow(
-      refresh?: boolean,
-      aal?: string,
-      xSessionToken?: string,
-      returnSessionTokenExchangeCode?: boolean,
-      returnTo?: string,
-      options?: any
+      requestParameters: FrontendApiCreateNativeLoginFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<LoginFlow> {
       return localVarFp
         .createNativeLoginFlow(
-          refresh,
-          aal,
-          xSessionToken,
-          returnSessionTokenExchangeCode,
-          returnTo,
+          requestParameters.refresh,
+          requestParameters.aal,
+          requestParameters.xSessionToken,
+          requestParameters.returnSessionTokenExchangeCode,
+          requestParameters.returnTo,
           options
         )
         .then((request) => request(axios, basePath));
@@ -6804,7 +6838,9 @@ export const FrontendApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createNativeRecoveryFlow(options?: any): AxiosPromise<RecoveryFlow> {
+    createNativeRecoveryFlow(
+      options?: AxiosRequestConfig
+    ): AxiosPromise<RecoveryFlow> {
       return localVarFp
         .createNativeRecoveryFlow(options)
         .then((request) => request(axios, basePath));
@@ -6812,20 +6848,18 @@ export const FrontendApiFactory = function (
     /**
      * This endpoint initiates a registration flow for API clients such as mobile devices, smart TVs, and so on.  If a valid provided session cookie or session token is provided, a 400 Bad Request error will be returned unless the URL query parameter `?refresh=true` is set.  To fetch an existing registration flow call `/self-service/registration/flows?flow=<flow_id>`.  You MUST NOT use this endpoint in client-side (Single Page Apps, ReactJS, AngularJS) nor server-side (Java Server Pages, NodeJS, PHP, Golang, ...) browser applications. Using this endpoint in these applications will make you vulnerable to a variety of CSRF attacks.  In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred.  This endpoint MUST ONLY be used in scenarios such as native mobile apps (React Native, Objective C, Swift, Java, ...).  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
      * @summary Create Registration Flow for Native Apps
-     * @param {boolean} [returnSessionTokenExchangeCode] EnableSessionTokenExchangeCode requests the login flow to include a code that can be used to retrieve the session token after the login flow has been completed.
-     * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
+     * @param {FrontendApiCreateNativeRegistrationFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createNativeRegistrationFlow(
-      returnSessionTokenExchangeCode?: boolean,
-      returnTo?: string,
-      options?: any
+      requestParameters: FrontendApiCreateNativeRegistrationFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<RegistrationFlow> {
       return localVarFp
         .createNativeRegistrationFlow(
-          returnSessionTokenExchangeCode,
-          returnTo,
+          requestParameters.returnSessionTokenExchangeCode,
+          requestParameters.returnTo,
           options
         )
         .then((request) => request(axios, basePath));
@@ -6833,16 +6867,16 @@ export const FrontendApiFactory = function (
     /**
      * This endpoint initiates a settings flow for API clients such as mobile devices, smart TVs, and so on. You must provide a valid Ory Kratos Session Token for this endpoint to respond with HTTP 200 OK.  To fetch an existing settings flow call `/self-service/settings/flows?flow=<flow_id>`.  You MUST NOT use this endpoint in client-side (Single Page Apps, ReactJS, AngularJS) nor server-side (Java Server Pages, NodeJS, PHP, Golang, ...) browser applications. Using this endpoint in these applications will make you vulnerable to a variety of CSRF attacks.  Depending on your configuration this endpoint might return a 403 error if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor or change the configuration.  In the case of an error, the `error.id` of the JSON response body can be one of:  `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `session_inactive`: No Ory Session was found - sign in a user first.  This endpoint MUST ONLY be used in scenarios such as native mobile apps (React Native, Objective C, Swift, Java, ...).  More information can be found at [Ory Kratos User Settings & Profile Management Documentation](../self-service/flows/user-settings).
      * @summary Create Settings Flow for Native Apps
-     * @param {string} [xSessionToken] The Session Token of the Identity performing the settings flow.
+     * @param {FrontendApiCreateNativeSettingsFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createNativeSettingsFlow(
-      xSessionToken?: string,
-      options?: any
+      requestParameters: FrontendApiCreateNativeSettingsFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<SettingsFlow> {
       return localVarFp
-        .createNativeSettingsFlow(xSessionToken, options)
+        .createNativeSettingsFlow(requestParameters.xSessionToken, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -6852,7 +6886,7 @@ export const FrontendApiFactory = function (
      * @throws {RequiredError}
      */
     createNativeVerificationFlow(
-      options?: any
+      options?: AxiosRequestConfig
     ): AxiosPromise<VerificationFlow> {
       return localVarFp
         .createNativeVerificationFlow(options)
@@ -6861,153 +6895,166 @@ export const FrontendApiFactory = function (
     /**
      * Calling this endpoint invalidates all except the current session that belong to the logged-in user. Session data are not deleted.
      * @summary Disable my other sessions
-     * @param {string} [xSessionToken] Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
-     * @param {string} [cookie] Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+     * @param {FrontendApiDisableMyOtherSessionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     disableMyOtherSessions(
-      xSessionToken?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiDisableMyOtherSessionsRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<DeleteMySessionsCount> {
       return localVarFp
-        .disableMyOtherSessions(xSessionToken, cookie, options)
+        .disableMyOtherSessions(
+          requestParameters.xSessionToken,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * Calling this endpoint invalidates the specified session. The current session cannot be revoked. Session data are not deleted.
      * @summary Disable one of my sessions
-     * @param {string} id ID is the session\&#39;s ID.
-     * @param {string} [xSessionToken] Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
-     * @param {string} [cookie] Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+     * @param {FrontendApiDisableMySessionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     disableMySession(
-      id: string,
-      xSessionToken?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiDisableMySessionRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<void> {
       return localVarFp
-        .disableMySession(id, xSessionToken, cookie, options)
+        .disableMySession(
+          requestParameters.id,
+          requestParameters.xSessionToken,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      *
      * @summary Exchange Session Token
-     * @param {string} initCode The part of the code return when initializing the flow.
-     * @param {string} returnToCode The part of the code returned by the return_to URL.
+     * @param {FrontendApiExchangeSessionTokenRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     exchangeSessionToken(
-      initCode: string,
-      returnToCode: string,
-      options?: any
+      requestParameters: FrontendApiExchangeSessionTokenRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<SuccessfulNativeLogin> {
       return localVarFp
-        .exchangeSessionToken(initCode, returnToCode, options)
+        .exchangeSessionToken(
+          requestParameters.initCode,
+          requestParameters.returnToCode,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint returns the error associated with a user-facing self service errors.  This endpoint supports stub values to help you implement the error UI:  `?id=stub:500` - returns a stub 500 (Internal Server Error) error.  More information can be found at [Ory Kratos User User Facing Error Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-facing-errors).
      * @summary Get User-Flow Errors
-     * @param {string} id Error is the error\&#39;s ID
+     * @param {FrontendApiGetFlowErrorRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getFlowError(id: string, options?: any): AxiosPromise<FlowError> {
+    getFlowError(
+      requestParameters: FrontendApiGetFlowErrorRequest,
+      options?: AxiosRequestConfig
+    ): AxiosPromise<FlowError> {
       return localVarFp
-        .getFlowError(id, options)
+        .getFlowError(requestParameters.id, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint returns a login flow\'s context with, for example, error details and other information.  Browser flows expect the anti-CSRF cookie to be included in the request\'s HTTP Cookie Header. For AJAX requests you must ensure that cookies are included in the request or requests will fail.  If you use the browser-flow for server-side apps, the services need to run on a common top-level-domain and you need to forward the incoming HTTP Cookie header to this endpoint:  ```js pseudo-code example router.get(\'/login\', async function (req, res) { const flow = await client.getLoginFlow(req.header(\'cookie\'), req.query[\'flow\'])  res.render(\'login\', flow) }) ```  This request may fail due to several reasons. The `error.id` can be one of:  `session_already_available`: The user is already signed in. `self_service_flow_expired`: The flow is expired and you should request a new one.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
      * @summary Get Login Flow
-     * @param {string} id The Login Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/login?flow&#x3D;abcde&#x60;).
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiGetLoginFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getLoginFlow(
-      id: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiGetLoginFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<LoginFlow> {
       return localVarFp
-        .getLoginFlow(id, cookie, options)
+        .getLoginFlow(requestParameters.id, requestParameters.cookie, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint returns a recovery flow\'s context with, for example, error details and other information.  Browser flows expect the anti-CSRF cookie to be included in the request\'s HTTP Cookie Header. For AJAX requests you must ensure that cookies are included in the request or requests will fail.  If you use the browser-flow for server-side apps, the services need to run on a common top-level-domain and you need to forward the incoming HTTP Cookie header to this endpoint:  ```js pseudo-code example router.get(\'/recovery\', async function (req, res) { const flow = await client.getRecoveryFlow(req.header(\'Cookie\'), req.query[\'flow\'])  res.render(\'recovery\', flow) }) ```  More information can be found at [Ory Kratos Account Recovery Documentation](../self-service/flows/account-recovery).
      * @summary Get Recovery Flow
-     * @param {string} id The Flow ID  The value for this parameter comes from &#x60;request&#x60; URL Query parameter sent to your application (e.g. &#x60;/recovery?flow&#x3D;abcde&#x60;).
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiGetRecoveryFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getRecoveryFlow(
-      id: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiGetRecoveryFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<RecoveryFlow> {
       return localVarFp
-        .getRecoveryFlow(id, cookie, options)
+        .getRecoveryFlow(
+          requestParameters.id,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint returns a registration flow\'s context with, for example, error details and other information.  Browser flows expect the anti-CSRF cookie to be included in the request\'s HTTP Cookie Header. For AJAX requests you must ensure that cookies are included in the request or requests will fail.  If you use the browser-flow for server-side apps, the services need to run on a common top-level-domain and you need to forward the incoming HTTP Cookie header to this endpoint:  ```js pseudo-code example router.get(\'/registration\', async function (req, res) { const flow = await client.getRegistrationFlow(req.header(\'cookie\'), req.query[\'flow\'])  res.render(\'registration\', flow) }) ```  This request may fail due to several reasons. The `error.id` can be one of:  `session_already_available`: The user is already signed in. `self_service_flow_expired`: The flow is expired and you should request a new one.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
      * @summary Get Registration Flow
-     * @param {string} id The Registration Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/registration?flow&#x3D;abcde&#x60;).
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiGetRegistrationFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getRegistrationFlow(
-      id: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiGetRegistrationFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<RegistrationFlow> {
       return localVarFp
-        .getRegistrationFlow(id, cookie, options)
+        .getRegistrationFlow(
+          requestParameters.id,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * When accessing this endpoint through Ory Kratos\' Public API you must ensure that either the Ory Kratos Session Cookie or the Ory Kratos Session Token are set.  Depending on your configuration this endpoint might return a 403 error if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor or change the configuration.  You can access this endpoint without credentials when using Ory Kratos\' Admin API.  If this endpoint is called via an AJAX request, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `session_inactive`: No Ory Session was found - sign in a user first. `security_identity_mismatch`: The flow was interrupted with `session_refresh_required` but apparently some other identity logged in instead.  More information can be found at [Ory Kratos User Settings & Profile Management Documentation](../self-service/flows/user-settings).
      * @summary Get Settings Flow
-     * @param {string} id ID is the Settings Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/settings?flow&#x3D;abcde&#x60;).
-     * @param {string} [xSessionToken] The Session Token  When using the SDK in an app without a browser, please include the session token here.
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiGetSettingsFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getSettingsFlow(
-      id: string,
-      xSessionToken?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiGetSettingsFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<SettingsFlow> {
       return localVarFp
-        .getSettingsFlow(id, xSessionToken, cookie, options)
+        .getSettingsFlow(
+          requestParameters.id,
+          requestParameters.xSessionToken,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint returns a verification flow\'s context with, for example, error details and other information.  Browser flows expect the anti-CSRF cookie to be included in the request\'s HTTP Cookie Header. For AJAX requests you must ensure that cookies are included in the request or requests will fail.  If you use the browser-flow for server-side apps, the services need to run on a common top-level-domain and you need to forward the incoming HTTP Cookie header to this endpoint:  ```js pseudo-code example router.get(\'/recovery\', async function (req, res) { const flow = await client.getVerificationFlow(req.header(\'cookie\'), req.query[\'flow\'])  res.render(\'verification\', flow) }) ```  More information can be found at [Ory Kratos Email and Phone Verification Documentation](https://www.ory.sh/docs/kratos/self-service/flows/verify-email-account-activation).
      * @summary Get Verification Flow
-     * @param {string} id The Flow ID  The value for this parameter comes from &#x60;request&#x60; URL Query parameter sent to your application (e.g. &#x60;/verification?flow&#x3D;abcde&#x60;).
-     * @param {string} [cookie] HTTP Cookies  When using the SDK on the server side you must include the HTTP Cookie Header originally sent to your HTTP handler here.
+     * @param {FrontendApiGetVerificationFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getVerificationFlow(
-      id: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiGetVerificationFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<VerificationFlow> {
       return localVarFp
-        .getVerificationFlow(id, cookie, options)
+        .getVerificationFlow(
+          requestParameters.id,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -7016,7 +7063,7 @@ export const FrontendApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getWebAuthnJavaScript(options?: any): AxiosPromise<string> {
+    getWebAuthnJavaScript(options?: AxiosRequestConfig): AxiosPromise<string> {
       return localVarFp
         .getWebAuthnJavaScript(options)
         .then((request) => request(axios, basePath));
@@ -7024,32 +7071,22 @@ export const FrontendApiFactory = function (
     /**
      * This endpoints returns all other active sessions that belong to the logged-in user. The current session can be retrieved by calling the `/sessions/whoami` endpoint.
      * @summary Get My Active Sessions
-     * @param {number} [perPage] Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
-     * @param {number} [page] Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
-     * @param {number} [pageSize] Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {string} [xSessionToken] Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
-     * @param {string} [cookie] Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+     * @param {FrontendApiListMySessionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listMySessions(
-      perPage?: number,
-      page?: number,
-      pageSize?: number,
-      pageToken?: string,
-      xSessionToken?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiListMySessionsRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<Array<Session>> {
       return localVarFp
         .listMySessions(
-          perPage,
-          page,
-          pageSize,
-          pageToken,
-          xSessionToken,
-          cookie,
+          requestParameters.perPage,
+          requestParameters.page,
+          requestParameters.pageSize,
+          requestParameters.pageToken,
+          requestParameters.xSessionToken,
+          requestParameters.cookie,
           options
         )
         .then((request) => request(axios, basePath));
@@ -7057,161 +7094,878 @@ export const FrontendApiFactory = function (
     /**
      * Use this endpoint to log out an identity using an Ory Session Token. If the Ory Session Token was successfully revoked, the server returns a 204 No Content response. A 204 No Content response is also sent when the Ory Session Token has been revoked already before.  If the Ory Session Token is malformed or does not exist a 403 Forbidden response will be returned.  This endpoint does not remove any HTTP Cookies - use the Browser-Based Self-Service Logout Flow instead.
      * @summary Perform Logout for Native Apps
-     * @param {PerformNativeLogoutBody} body
+     * @param {FrontendApiPerformNativeLogoutRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     performNativeLogout(
-      body: PerformNativeLogoutBody,
-      options?: any
+      requestParameters: FrontendApiPerformNativeLogoutRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<void> {
       return localVarFp
-        .performNativeLogout(body, options)
+        .performNativeLogout(requestParameters.body, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * Uses the HTTP Headers in the GET request to determine (e.g. by using checking the cookies) who is authenticated. Returns a session object in the body or 401 if the credentials are invalid or no credentials were sent. When the request it successful it adds the user ID to the \'X-Kratos-Authenticated-Identity-Id\' header in the response.  If you call this endpoint from a server-side application, you must forward the HTTP Cookie Header to this endpoint:  ```js pseudo-code example router.get(\'/protected-endpoint\', async function (req, res) { const session = await client.toSession(undefined, req.header(\'cookie\'))  console.log(session) }) ```  When calling this endpoint from a non-browser application (e.g. mobile app) you must include the session token:  ```js pseudo-code example ... const session = await client.toSession(\"the-session-token\")  console.log(session) ```  When using a token template, the token is included in the `tokenized` field of the session.  ```js pseudo-code example ... const session = await client.toSession(\"the-session-token\", { tokenize_as: \"example-jwt-template\" })  console.log(session.tokenized) // The JWT ```  Depending on your configuration this endpoint might return a 403 status code if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor or change the configuration.  This endpoint is useful for:  AJAX calls. Remember to send credentials and set up CORS correctly! Reverse proxies and API Gateways Server-side calls - use the `X-Session-Token` header!  This endpoint authenticates users by checking:  if the `Cookie` HTTP header was set containing an Ory Kratos Session Cookie; if the `Authorization: bearer <ory-session-token>` HTTP header was set with a valid Ory Kratos Session Token; if the `X-Session-Token` HTTP header was set with a valid Ory Kratos Session Token.  If none of these headers are set or the cookie or token are invalid, the endpoint returns a HTTP 401 status code.  As explained above, this request may fail due to several reasons. The `error.id` can be one of:  `session_inactive`: No active session was found in the request (e.g. no Ory Session Cookie / Ory Session Token). `session_aal2_required`: An active session was found but it does not fulfil the Authenticator Assurance Level, implying that the session must (e.g.) authenticate the second factor.
      * @summary Check Who the Current HTTP Session Belongs To
-     * @param {string} [xSessionToken] Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
-     * @param {string} [cookie] Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
-     * @param {string} [tokenizeAs] Returns the session additionally as a token (such as a JWT)  The value of this parameter has to be a valid, configured Ory Session token template. For more information head over to [the documentation](http://ory.sh/docs/identities/session-to-jwt-cors).
+     * @param {FrontendApiToSessionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     toSession(
-      xSessionToken?: string,
-      cookie?: string,
-      tokenizeAs?: string,
-      options?: any
+      requestParameters: FrontendApiToSessionRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<Session> {
       return localVarFp
-        .toSession(xSessionToken, cookie, tokenizeAs, options)
+        .toSession(
+          requestParameters.xSessionToken,
+          requestParameters.cookie,
+          requestParameters.tokenizeAs,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * Use this endpoint to complete a login flow. This endpoint behaves differently for API and browser flows.  API flows expect `application/json` to be sent in the body and responds with HTTP 200 and a application/json body with the session token on success; HTTP 410 if the original flow expired with the appropriate error messages set and optionally a `use_flow_id` parameter in the body; HTTP 400 on form validation errors.  Browser flows expect a Content-Type of `application/x-www-form-urlencoded` or `application/json` to be sent in the body and respond with a HTTP 303 redirect to the post/after login URL or the `return_to` value if it was set and if the login succeeded; a HTTP 303 redirect to the login UI URL with the flow ID containing the validation errors otherwise.  Browser flows with an accept header of `application/json` will not redirect but instead respond with HTTP 200 and a application/json body with the signed in identity and a `Set-Cookie` header on success; HTTP 303 redirect to a fresh login flow if the original flow expired with the appropriate error messages set; HTTP 400 on form validation errors.  If this endpoint is called with `Accept: application/json` in the header, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration! `browser_location_change_required`: Usually sent when an AJAX request indicates that the browser needs to open a specific URL. Most likely used in Social Sign In flows.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
      * @summary Submit a Login Flow
-     * @param {string} flow The Login Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/login?flow&#x3D;abcde&#x60;).
-     * @param {object} body
-     * @param {string} [xSessionToken] The Session Token of the Identity performing the settings flow.
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiUpdateLoginFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateLoginFlow(
-      flow: string,
-      body: object,
-      xSessionToken?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiUpdateLoginFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<SuccessfulNativeLogin> {
       return localVarFp
-        .updateLoginFlow(flow, body, xSessionToken, cookie, options)
+        .updateLoginFlow(
+          requestParameters.flow,
+          requestParameters.body,
+          requestParameters.xSessionToken,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint logs out an identity in a self-service manner.  If the `Accept` HTTP header is not set to `application/json`, the browser will be redirected (HTTP 303 See Other) to the `return_to` parameter of the initial request or fall back to `urls.default_return_to`.  If the `Accept` HTTP header is set to `application/json`, a 204 No Content response will be sent on successful logout instead.  This endpoint is NOT INTENDED for API clients and only works with browsers (Chrome, Firefox, ...). For API clients you can call the `/self-service/logout/api` URL directly with the Ory Session Token.  More information can be found at [Ory Kratos User Logout Documentation](https://www.ory.sh/docs/next/kratos/self-service/flows/user-logout).
      * @summary Update Logout Flow
-     * @param {string} [token] A Valid Logout Token  If you do not have a logout token because you only have a session cookie, call &#x60;/self-service/logout/browser&#x60; to generate a URL for this endpoint.
-     * @param {string} [returnTo] The URL to return to after the logout was completed.
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiUpdateLogoutFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateLogoutFlow(
-      token?: string,
-      returnTo?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiUpdateLogoutFlowRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<void> {
       return localVarFp
-        .updateLogoutFlow(token, returnTo, cookie, options)
+        .updateLogoutFlow(
+          requestParameters.token,
+          requestParameters.returnTo,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * Use this endpoint to update a recovery flow. This endpoint behaves differently for API and browser flows and has several states:  `choose_method` expects `flow` (in the URL query) and `email` (in the body) to be sent and works with API- and Browser-initiated flows. For API clients and Browser clients with HTTP Header `Accept: application/json` it either returns a HTTP 200 OK when the form is valid and HTTP 400 OK when the form is invalid. and a HTTP 303 See Other redirect with a fresh recovery flow if the flow was otherwise invalid (e.g. expired). For Browser clients without HTTP Header `Accept` or with `Accept: text/_*` it returns a HTTP 303 See Other redirect to the Recovery UI URL with the Recovery Flow ID appended. `sent_email` is the success state after `choose_method` for the `link` method and allows the user to request another recovery email. It works for both API and Browser-initiated flows and returns the same responses as the flow in `choose_method` state. `passed_challenge` expects a `token` to be sent in the URL query and given the nature of the flow (\"sending a recovery link\") does not have any API capabilities. The server responds with a HTTP 303 See Other redirect either to the Settings UI URL (if the link was valid) and instructs the user to update their password, or a redirect to the Recover UI URL with a new Recovery Flow ID which contains an error message that the recovery link was invalid.  More information can be found at [Ory Kratos Account Recovery Documentation](../self-service/flows/account-recovery).
      * @summary Update Recovery Flow
-     * @param {string} flow The Recovery Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/recovery?flow&#x3D;abcde&#x60;).
-     * @param {object} body
-     * @param {string} [token] Recovery Token  The recovery token which completes the recovery request. If the token is invalid (e.g. expired) an error will be shown to the end-user.  This parameter is usually set in a link and not used by any direct API call.
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiUpdateRecoveryFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateRecoveryFlow(
-      flow: string,
-      body: object,
-      token?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiUpdateRecoveryFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<RecoveryFlow> {
       return localVarFp
-        .updateRecoveryFlow(flow, body, token, cookie, options)
+        .updateRecoveryFlow(
+          requestParameters.flow,
+          requestParameters.body,
+          requestParameters.token,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * Use this endpoint to complete a registration flow by sending an identity\'s traits and password. This endpoint behaves differently for API and browser flows.  API flows expect `application/json` to be sent in the body and respond with HTTP 200 and a application/json body with the created identity success - if the session hook is configured the `session` and `session_token` will also be included; HTTP 410 if the original flow expired with the appropriate error messages set and optionally a `use_flow_id` parameter in the body; HTTP 400 on form validation errors.  Browser flows expect a Content-Type of `application/x-www-form-urlencoded` or `application/json` to be sent in the body and respond with a HTTP 303 redirect to the post/after registration URL or the `return_to` value if it was set and if the registration succeeded; a HTTP 303 redirect to the registration UI URL with the flow ID containing the validation errors otherwise.  Browser flows with an accept header of `application/json` will not redirect but instead respond with HTTP 200 and a application/json body with the signed in identity and a `Set-Cookie` header on success; HTTP 303 redirect to a fresh login flow if the original flow expired with the appropriate error messages set; HTTP 400 on form validation errors.  If this endpoint is called with `Accept: application/json` in the header, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration! `browser_location_change_required`: Usually sent when an AJAX request indicates that the browser needs to open a specific URL. Most likely used in Social Sign In flows.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
      * @summary Update Registration Flow
-     * @param {string} flow The Registration Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/registration?flow&#x3D;abcde&#x60;).
-     * @param {object} body
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiUpdateRegistrationFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateRegistrationFlow(
-      flow: string,
-      body: object,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiUpdateRegistrationFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<SuccessfulNativeRegistration> {
       return localVarFp
-        .updateRegistrationFlow(flow, body, cookie, options)
+        .updateRegistrationFlow(
+          requestParameters.flow,
+          requestParameters.body,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * Use this endpoint to complete a settings flow by sending an identity\'s updated password. This endpoint behaves differently for API and browser flows.  API-initiated flows expect `application/json` to be sent in the body and respond with HTTP 200 and an application/json body with the session token on success; HTTP 303 redirect to a fresh settings flow if the original flow expired with the appropriate error messages set; HTTP 400 on form validation errors. HTTP 401 when the endpoint is called without a valid session token. HTTP 403 when `selfservice.flows.settings.privileged_session_max_age` was reached or the session\'s AAL is too low. Implies that the user needs to re-authenticate.  Browser flows without HTTP Header `Accept` or with `Accept: text/_*` respond with a HTTP 303 redirect to the post/after settings URL or the `return_to` value if it was set and if the flow succeeded; a HTTP 303 redirect to the Settings UI URL with the flow ID containing the validation errors otherwise. a HTTP 303 redirect to the login endpoint when `selfservice.flows.settings.privileged_session_max_age` was reached or the session\'s AAL is too low.  Browser flows with HTTP Header `Accept: application/json` respond with HTTP 200 and a application/json body with the signed in identity and a `Set-Cookie` header on success; HTTP 303 redirect to a fresh login flow if the original flow expired with the appropriate error messages set; HTTP 401 when the endpoint is called without a valid session cookie. HTTP 403 when the page is accessed without a session cookie or the session\'s AAL is too low. HTTP 400 on form validation errors.  Depending on your configuration this endpoint might return a 403 error if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor (happens automatically for server-side browser flows) or change the configuration.  If this endpoint is called with a `Accept: application/json` HTTP header, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_refresh_required`: The identity requested to change something that needs a privileged session. Redirect the identity to the login init endpoint with query parameters `?refresh=true&return_to=<the-current-browser-url>`, or initiate a refresh login flow otherwise. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `session_inactive`: No Ory Session was found - sign in a user first. `security_identity_mismatch`: The flow was interrupted with `session_refresh_required` but apparently some other identity logged in instead. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration! `browser_location_change_required`: Usually sent when an AJAX request indicates that the browser needs to open a specific URL. Most likely used in Social Sign In flows.  More information can be found at [Ory Kratos User Settings & Profile Management Documentation](../self-service/flows/user-settings).
      * @summary Complete Settings Flow
-     * @param {string} flow The Settings Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/settings?flow&#x3D;abcde&#x60;).
-     * @param {object} body
-     * @param {string} [xSessionToken] The Session Token of the Identity performing the settings flow.
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiUpdateSettingsFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateSettingsFlow(
-      flow: string,
-      body: object,
-      xSessionToken?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiUpdateSettingsFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<SettingsFlow> {
       return localVarFp
-        .updateSettingsFlow(flow, body, xSessionToken, cookie, options)
+        .updateSettingsFlow(
+          requestParameters.flow,
+          requestParameters.body,
+          requestParameters.xSessionToken,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * Use this endpoint to complete a verification flow. This endpoint behaves differently for API and browser flows and has several states:  `choose_method` expects `flow` (in the URL query) and `email` (in the body) to be sent and works with API- and Browser-initiated flows. For API clients and Browser clients with HTTP Header `Accept: application/json` it either returns a HTTP 200 OK when the form is valid and HTTP 400 OK when the form is invalid and a HTTP 303 See Other redirect with a fresh verification flow if the flow was otherwise invalid (e.g. expired). For Browser clients without HTTP Header `Accept` or with `Accept: text/_*` it returns a HTTP 303 See Other redirect to the Verification UI URL with the Verification Flow ID appended. `sent_email` is the success state after `choose_method` when using the `link` method and allows the user to request another verification email. It works for both API and Browser-initiated flows and returns the same responses as the flow in `choose_method` state. `passed_challenge` expects a `token` to be sent in the URL query and given the nature of the flow (\"sending a verification link\") does not have any API capabilities. The server responds with a HTTP 303 See Other redirect either to the Settings UI URL (if the link was valid) and instructs the user to update their password, or a redirect to the Verification UI URL with a new Verification Flow ID which contains an error message that the verification link was invalid.  More information can be found at [Ory Kratos Email and Phone Verification Documentation](https://www.ory.sh/docs/kratos/self-service/flows/verify-email-account-activation).
      * @summary Complete Verification Flow
-     * @param {string} flow The Verification Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/verification?flow&#x3D;abcde&#x60;).
-     * @param {object} body
-     * @param {string} [token] Verification Token  The verification token which completes the verification request. If the token is invalid (e.g. expired) an error will be shown to the end-user.  This parameter is usually set in a link and not used by any direct API call.
-     * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+     * @param {FrontendApiUpdateVerificationFlowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateVerificationFlow(
-      flow: string,
-      body: object,
-      token?: string,
-      cookie?: string,
-      options?: any
+      requestParameters: FrontendApiUpdateVerificationFlowRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<VerificationFlow> {
       return localVarFp
-        .updateVerificationFlow(flow, body, token, cookie, options)
+        .updateVerificationFlow(
+          requestParameters.flow,
+          requestParameters.body,
+          requestParameters.token,
+          requestParameters.cookie,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
   };
 };
+
+/**
+ * Request parameters for createBrowserLoginFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiCreateBrowserLoginFlowRequest
+ */
+export interface FrontendApiCreateBrowserLoginFlowRequest {
+  /**
+   * Refresh a login session  If set to true, this will refresh an existing login session by asking the user to sign in again. This will reset the authenticated_at time of the session.
+   * @type {boolean}
+   * @memberof FrontendApiCreateBrowserLoginFlow
+   */
+  readonly refresh?: boolean;
+
+  /**
+   * Request a Specific AuthenticationMethod Assurance Level  Use this parameter to upgrade an existing session\&#39;s authenticator assurance level (AAL). This allows you to ask for multi-factor authentication. When an identity sign in using e.g. username+password, the AAL is 1. If you wish to \&quot;upgrade\&quot; the session\&#39;s security by asking the user to perform TOTP / WebAuth/ ... you would set this to \&quot;aal2\&quot;.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserLoginFlow
+   */
+  readonly aal?: string;
+
+  /**
+   * The URL to return the browser to after the flow was completed.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserLoginFlow
+   */
+  readonly returnTo?: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserLoginFlow
+   */
+  readonly cookie?: string;
+
+  /**
+   * An optional Hydra login challenge. If present, Kratos will cooperate with Ory Hydra to act as an OAuth2 identity provider.  The value for this parameter comes from &#x60;login_challenge&#x60; URL Query parameter sent to your application (e.g. &#x60;/login?login_challenge&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserLoginFlow
+   */
+  readonly loginChallenge?: string;
+
+  /**
+   * An optional organization ID that should be used for logging this user in. This parameter is only effective in the Ory Network.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserLoginFlow
+   */
+  readonly organization?: string;
+}
+
+/**
+ * Request parameters for createBrowserLogoutFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiCreateBrowserLogoutFlowRequest
+ */
+export interface FrontendApiCreateBrowserLogoutFlowRequest {
+  /**
+   * HTTP Cookies  If you call this endpoint from a backend, please include the original Cookie header in the request.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserLogoutFlow
+   */
+  readonly cookie?: string;
+
+  /**
+   * Return to URL  The URL to which the browser should be redirected to after the logout has been performed.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserLogoutFlow
+   */
+  readonly returnTo?: string;
+}
+
+/**
+ * Request parameters for createBrowserRecoveryFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiCreateBrowserRecoveryFlowRequest
+ */
+export interface FrontendApiCreateBrowserRecoveryFlowRequest {
+  /**
+   * The URL to return the browser to after the flow was completed.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserRecoveryFlow
+   */
+  readonly returnTo?: string;
+}
+
+/**
+ * Request parameters for createBrowserRegistrationFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiCreateBrowserRegistrationFlowRequest
+ */
+export interface FrontendApiCreateBrowserRegistrationFlowRequest {
+  /**
+   * The URL to return the browser to after the flow was completed.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserRegistrationFlow
+   */
+  readonly returnTo?: string;
+
+  /**
+   * Ory OAuth 2.0 Login Challenge.  If set will cooperate with Ory OAuth2 and OpenID to act as an OAuth2 server / OpenID Provider.  The value for this parameter comes from &#x60;login_challenge&#x60; URL Query parameter sent to your application (e.g. &#x60;/registration?login_challenge&#x3D;abcde&#x60;).  This feature is compatible with Ory Hydra when not running on the Ory Network.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserRegistrationFlow
+   */
+  readonly loginChallenge?: string;
+
+  /**
+   * The URL to return the browser to after the verification flow was completed.  After the registration flow is completed, the user will be sent a verification email. Upon completing the verification flow, this URL will be used to override the default &#x60;selfservice.flows.verification.after.default_redirect_to&#x60; value.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserRegistrationFlow
+   */
+  readonly afterVerificationReturnTo?: string;
+
+  /**
+   *
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserRegistrationFlow
+   */
+  readonly organization?: string;
+}
+
+/**
+ * Request parameters for createBrowserSettingsFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiCreateBrowserSettingsFlowRequest
+ */
+export interface FrontendApiCreateBrowserSettingsFlowRequest {
+  /**
+   * The URL to return the browser to after the flow was completed.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserSettingsFlow
+   */
+  readonly returnTo?: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserSettingsFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for createBrowserVerificationFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiCreateBrowserVerificationFlowRequest
+ */
+export interface FrontendApiCreateBrowserVerificationFlowRequest {
+  /**
+   * The URL to return the browser to after the flow was completed.
+   * @type {string}
+   * @memberof FrontendApiCreateBrowserVerificationFlow
+   */
+  readonly returnTo?: string;
+}
+
+/**
+ * Request parameters for createNativeLoginFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiCreateNativeLoginFlowRequest
+ */
+export interface FrontendApiCreateNativeLoginFlowRequest {
+  /**
+   * Refresh a login session  If set to true, this will refresh an existing login session by asking the user to sign in again. This will reset the authenticated_at time of the session.
+   * @type {boolean}
+   * @memberof FrontendApiCreateNativeLoginFlow
+   */
+  readonly refresh?: boolean;
+
+  /**
+   * Request a Specific AuthenticationMethod Assurance Level  Use this parameter to upgrade an existing session\&#39;s authenticator assurance level (AAL). This allows you to ask for multi-factor authentication. When an identity sign in using e.g. username+password, the AAL is 1. If you wish to \&quot;upgrade\&quot; the session\&#39;s security by asking the user to perform TOTP / WebAuth/ ... you would set this to \&quot;aal2\&quot;.
+   * @type {string}
+   * @memberof FrontendApiCreateNativeLoginFlow
+   */
+  readonly aal?: string;
+
+  /**
+   * The Session Token of the Identity performing the settings flow.
+   * @type {string}
+   * @memberof FrontendApiCreateNativeLoginFlow
+   */
+  readonly xSessionToken?: string;
+
+  /**
+   * EnableSessionTokenExchangeCode requests the login flow to include a code that can be used to retrieve the session token after the login flow has been completed.
+   * @type {boolean}
+   * @memberof FrontendApiCreateNativeLoginFlow
+   */
+  readonly returnSessionTokenExchangeCode?: boolean;
+
+  /**
+   * The URL to return the browser to after the flow was completed.
+   * @type {string}
+   * @memberof FrontendApiCreateNativeLoginFlow
+   */
+  readonly returnTo?: string;
+}
+
+/**
+ * Request parameters for createNativeRegistrationFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiCreateNativeRegistrationFlowRequest
+ */
+export interface FrontendApiCreateNativeRegistrationFlowRequest {
+  /**
+   * EnableSessionTokenExchangeCode requests the login flow to include a code that can be used to retrieve the session token after the login flow has been completed.
+   * @type {boolean}
+   * @memberof FrontendApiCreateNativeRegistrationFlow
+   */
+  readonly returnSessionTokenExchangeCode?: boolean;
+
+  /**
+   * The URL to return the browser to after the flow was completed.
+   * @type {string}
+   * @memberof FrontendApiCreateNativeRegistrationFlow
+   */
+  readonly returnTo?: string;
+}
+
+/**
+ * Request parameters for createNativeSettingsFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiCreateNativeSettingsFlowRequest
+ */
+export interface FrontendApiCreateNativeSettingsFlowRequest {
+  /**
+   * The Session Token of the Identity performing the settings flow.
+   * @type {string}
+   * @memberof FrontendApiCreateNativeSettingsFlow
+   */
+  readonly xSessionToken?: string;
+}
+
+/**
+ * Request parameters for disableMyOtherSessions operation in FrontendApi.
+ * @export
+ * @interface FrontendApiDisableMyOtherSessionsRequest
+ */
+export interface FrontendApiDisableMyOtherSessionsRequest {
+  /**
+   * Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
+   * @type {string}
+   * @memberof FrontendApiDisableMyOtherSessions
+   */
+  readonly xSessionToken?: string;
+
+  /**
+   * Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+   * @type {string}
+   * @memberof FrontendApiDisableMyOtherSessions
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for disableMySession operation in FrontendApi.
+ * @export
+ * @interface FrontendApiDisableMySessionRequest
+ */
+export interface FrontendApiDisableMySessionRequest {
+  /**
+   * ID is the session\&#39;s ID.
+   * @type {string}
+   * @memberof FrontendApiDisableMySession
+   */
+  readonly id: string;
+
+  /**
+   * Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
+   * @type {string}
+   * @memberof FrontendApiDisableMySession
+   */
+  readonly xSessionToken?: string;
+
+  /**
+   * Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+   * @type {string}
+   * @memberof FrontendApiDisableMySession
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for exchangeSessionToken operation in FrontendApi.
+ * @export
+ * @interface FrontendApiExchangeSessionTokenRequest
+ */
+export interface FrontendApiExchangeSessionTokenRequest {
+  /**
+   * The part of the code return when initializing the flow.
+   * @type {string}
+   * @memberof FrontendApiExchangeSessionToken
+   */
+  readonly initCode: string;
+
+  /**
+   * The part of the code returned by the return_to URL.
+   * @type {string}
+   * @memberof FrontendApiExchangeSessionToken
+   */
+  readonly returnToCode: string;
+}
+
+/**
+ * Request parameters for getFlowError operation in FrontendApi.
+ * @export
+ * @interface FrontendApiGetFlowErrorRequest
+ */
+export interface FrontendApiGetFlowErrorRequest {
+  /**
+   * Error is the error\&#39;s ID
+   * @type {string}
+   * @memberof FrontendApiGetFlowError
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getLoginFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiGetLoginFlowRequest
+ */
+export interface FrontendApiGetLoginFlowRequest {
+  /**
+   * The Login Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/login?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiGetLoginFlow
+   */
+  readonly id: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiGetLoginFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for getRecoveryFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiGetRecoveryFlowRequest
+ */
+export interface FrontendApiGetRecoveryFlowRequest {
+  /**
+   * The Flow ID  The value for this parameter comes from &#x60;request&#x60; URL Query parameter sent to your application (e.g. &#x60;/recovery?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiGetRecoveryFlow
+   */
+  readonly id: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiGetRecoveryFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for getRegistrationFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiGetRegistrationFlowRequest
+ */
+export interface FrontendApiGetRegistrationFlowRequest {
+  /**
+   * The Registration Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/registration?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiGetRegistrationFlow
+   */
+  readonly id: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiGetRegistrationFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for getSettingsFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiGetSettingsFlowRequest
+ */
+export interface FrontendApiGetSettingsFlowRequest {
+  /**
+   * ID is the Settings Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/settings?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiGetSettingsFlow
+   */
+  readonly id: string;
+
+  /**
+   * The Session Token  When using the SDK in an app without a browser, please include the session token here.
+   * @type {string}
+   * @memberof FrontendApiGetSettingsFlow
+   */
+  readonly xSessionToken?: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiGetSettingsFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for getVerificationFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiGetVerificationFlowRequest
+ */
+export interface FrontendApiGetVerificationFlowRequest {
+  /**
+   * The Flow ID  The value for this parameter comes from &#x60;request&#x60; URL Query parameter sent to your application (e.g. &#x60;/verification?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiGetVerificationFlow
+   */
+  readonly id: string;
+
+  /**
+   * HTTP Cookies  When using the SDK on the server side you must include the HTTP Cookie Header originally sent to your HTTP handler here.
+   * @type {string}
+   * @memberof FrontendApiGetVerificationFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for listMySessions operation in FrontendApi.
+ * @export
+ * @interface FrontendApiListMySessionsRequest
+ */
+export interface FrontendApiListMySessionsRequest {
+  /**
+   * Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
+   * @type {number}
+   * @memberof FrontendApiListMySessions
+   */
+  readonly perPage?: number;
+
+  /**
+   * Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
+   * @type {number}
+   * @memberof FrontendApiListMySessions
+   */
+  readonly page?: number;
+
+  /**
+   * Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {number}
+   * @memberof FrontendApiListMySessions
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {string}
+   * @memberof FrontendApiListMySessions
+   */
+  readonly pageToken?: string;
+
+  /**
+   * Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
+   * @type {string}
+   * @memberof FrontendApiListMySessions
+   */
+  readonly xSessionToken?: string;
+
+  /**
+   * Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+   * @type {string}
+   * @memberof FrontendApiListMySessions
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for performNativeLogout operation in FrontendApi.
+ * @export
+ * @interface FrontendApiPerformNativeLogoutRequest
+ */
+export interface FrontendApiPerformNativeLogoutRequest {
+  /**
+   *
+   * @type {PerformNativeLogoutBody}
+   * @memberof FrontendApiPerformNativeLogout
+   */
+  readonly body: PerformNativeLogoutBody;
+}
+
+/**
+ * Request parameters for toSession operation in FrontendApi.
+ * @export
+ * @interface FrontendApiToSessionRequest
+ */
+export interface FrontendApiToSessionRequest {
+  /**
+   * Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
+   * @type {string}
+   * @memberof FrontendApiToSession
+   */
+  readonly xSessionToken?: string;
+
+  /**
+   * Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+   * @type {string}
+   * @memberof FrontendApiToSession
+   */
+  readonly cookie?: string;
+
+  /**
+   * Returns the session additionally as a token (such as a JWT)  The value of this parameter has to be a valid, configured Ory Session token template. For more information head over to [the documentation](http://ory.sh/docs/identities/session-to-jwt-cors).
+   * @type {string}
+   * @memberof FrontendApiToSession
+   */
+  readonly tokenizeAs?: string;
+}
+
+/**
+ * Request parameters for updateLoginFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiUpdateLoginFlowRequest
+ */
+export interface FrontendApiUpdateLoginFlowRequest {
+  /**
+   * The Login Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/login?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiUpdateLoginFlow
+   */
+  readonly flow: string;
+
+  /**
+   *
+   * @type {object}
+   * @memberof FrontendApiUpdateLoginFlow
+   */
+  readonly body: object;
+
+  /**
+   * The Session Token of the Identity performing the settings flow.
+   * @type {string}
+   * @memberof FrontendApiUpdateLoginFlow
+   */
+  readonly xSessionToken?: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiUpdateLoginFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for updateLogoutFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiUpdateLogoutFlowRequest
+ */
+export interface FrontendApiUpdateLogoutFlowRequest {
+  /**
+   * A Valid Logout Token  If you do not have a logout token because you only have a session cookie, call &#x60;/self-service/logout/browser&#x60; to generate a URL for this endpoint.
+   * @type {string}
+   * @memberof FrontendApiUpdateLogoutFlow
+   */
+  readonly token?: string;
+
+  /**
+   * The URL to return to after the logout was completed.
+   * @type {string}
+   * @memberof FrontendApiUpdateLogoutFlow
+   */
+  readonly returnTo?: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiUpdateLogoutFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for updateRecoveryFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiUpdateRecoveryFlowRequest
+ */
+export interface FrontendApiUpdateRecoveryFlowRequest {
+  /**
+   * The Recovery Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/recovery?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiUpdateRecoveryFlow
+   */
+  readonly flow: string;
+
+  /**
+   *
+   * @type {object}
+   * @memberof FrontendApiUpdateRecoveryFlow
+   */
+  readonly body: object;
+
+  /**
+   * Recovery Token  The recovery token which completes the recovery request. If the token is invalid (e.g. expired) an error will be shown to the end-user.  This parameter is usually set in a link and not used by any direct API call.
+   * @type {string}
+   * @memberof FrontendApiUpdateRecoveryFlow
+   */
+  readonly token?: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiUpdateRecoveryFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for updateRegistrationFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiUpdateRegistrationFlowRequest
+ */
+export interface FrontendApiUpdateRegistrationFlowRequest {
+  /**
+   * The Registration Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/registration?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiUpdateRegistrationFlow
+   */
+  readonly flow: string;
+
+  /**
+   *
+   * @type {object}
+   * @memberof FrontendApiUpdateRegistrationFlow
+   */
+  readonly body: object;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiUpdateRegistrationFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for updateSettingsFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiUpdateSettingsFlowRequest
+ */
+export interface FrontendApiUpdateSettingsFlowRequest {
+  /**
+   * The Settings Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/settings?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiUpdateSettingsFlow
+   */
+  readonly flow: string;
+
+  /**
+   *
+   * @type {object}
+   * @memberof FrontendApiUpdateSettingsFlow
+   */
+  readonly body: object;
+
+  /**
+   * The Session Token of the Identity performing the settings flow.
+   * @type {string}
+   * @memberof FrontendApiUpdateSettingsFlow
+   */
+  readonly xSessionToken?: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiUpdateSettingsFlow
+   */
+  readonly cookie?: string;
+}
+
+/**
+ * Request parameters for updateVerificationFlow operation in FrontendApi.
+ * @export
+ * @interface FrontendApiUpdateVerificationFlowRequest
+ */
+export interface FrontendApiUpdateVerificationFlowRequest {
+  /**
+   * The Verification Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/verification?flow&#x3D;abcde&#x60;).
+   * @type {string}
+   * @memberof FrontendApiUpdateVerificationFlow
+   */
+  readonly flow: string;
+
+  /**
+   *
+   * @type {object}
+   * @memberof FrontendApiUpdateVerificationFlow
+   */
+  readonly body: object;
+
+  /**
+   * Verification Token  The verification token which completes the verification request. If the token is invalid (e.g. expired) an error will be shown to the end-user.  This parameter is usually set in a link and not used by any direct API call.
+   * @type {string}
+   * @memberof FrontendApiUpdateVerificationFlow
+   */
+  readonly token?: string;
+
+  /**
+   * HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @type {string}
+   * @memberof FrontendApiUpdateVerificationFlow
+   */
+  readonly cookie?: string;
+}
 
 /**
  * FrontendApi - object-oriented interface
@@ -7223,33 +7977,23 @@ export class FrontendApi extends BaseAPI {
   /**
    * This endpoint initializes a browser-based user login flow. This endpoint will set the appropriate cookies and anti-CSRF measures required for browser-based flows.  If this endpoint is opened as a link in the browser, it will be redirected to `selfservice.flows.login.ui_url` with the flow ID set as the query parameter `?flow=`. If a valid user session exists already, the browser will be redirected to `urls.default_redirect_url` unless the query parameter `?refresh=true` was set.  If this endpoint is called via an AJAX request, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `session_aal1_required`: Multi-factor auth (e.g. 2fa) was requested but the user has no session yet. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration!  The optional query parameter login_challenge is set when using Kratos with Hydra in an OAuth2 flow. See the oauth2_provider.url configuration option.  This endpoint is NOT INTENDED for clients that do not have a browser (Chrome, Firefox, ...) as cookies are needed.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
    * @summary Create Login Flow for Browsers
-   * @param {boolean} [refresh] Refresh a login session  If set to true, this will refresh an existing login session by asking the user to sign in again. This will reset the authenticated_at time of the session.
-   * @param {string} [aal] Request a Specific AuthenticationMethod Assurance Level  Use this parameter to upgrade an existing session\&#39;s authenticator assurance level (AAL). This allows you to ask for multi-factor authentication. When an identity sign in using e.g. username+password, the AAL is 1. If you wish to \&quot;upgrade\&quot; the session\&#39;s security by asking the user to perform TOTP / WebAuth/ ... you would set this to \&quot;aal2\&quot;.
-   * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
-   * @param {string} [loginChallenge] An optional Hydra login challenge. If present, Kratos will cooperate with Ory Hydra to act as an OAuth2 identity provider.  The value for this parameter comes from &#x60;login_challenge&#x60; URL Query parameter sent to your application (e.g. &#x60;/login?login_challenge&#x3D;abcde&#x60;).
-   * @param {string} [organization] An optional organization ID that should be used for logging this user in. This parameter is only effective in the Ory Network.
+   * @param {FrontendApiCreateBrowserLoginFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public createBrowserLoginFlow(
-    refresh?: boolean,
-    aal?: string,
-    returnTo?: string,
-    cookie?: string,
-    loginChallenge?: string,
-    organization?: string,
+    requestParameters: FrontendApiCreateBrowserLoginFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
       .createBrowserLoginFlow(
-        refresh,
-        aal,
-        returnTo,
-        cookie,
-        loginChallenge,
-        organization,
+        requestParameters.refresh,
+        requestParameters.aal,
+        requestParameters.returnTo,
+        requestParameters.cookie,
+        requestParameters.loginChallenge,
+        requestParameters.organization,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -7258,63 +8002,59 @@ export class FrontendApi extends BaseAPI {
   /**
    * This endpoint initializes a browser-based user logout flow and a URL which can be used to log out the user.  This endpoint is NOT INTENDED for API clients and only works with browsers (Chrome, Firefox, ...). For API clients you can call the `/self-service/logout/api` URL directly with the Ory Session Token.  The URL is only valid for the currently signed in user. If no user is signed in, this endpoint returns a 401 error.  When calling this endpoint from a backend, please ensure to properly forward the HTTP cookies.
    * @summary Create a Logout URL for Browsers
-   * @param {string} [cookie] HTTP Cookies  If you call this endpoint from a backend, please include the original Cookie header in the request.
-   * @param {string} [returnTo] Return to URL  The URL to which the browser should be redirected to after the logout has been performed.
+   * @param {FrontendApiCreateBrowserLogoutFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public createBrowserLogoutFlow(
-    cookie?: string,
-    returnTo?: string,
+    requestParameters: FrontendApiCreateBrowserLogoutFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .createBrowserLogoutFlow(cookie, returnTo, options)
+      .createBrowserLogoutFlow(
+        requestParameters.cookie,
+        requestParameters.returnTo,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint initializes a browser-based account recovery flow. Once initialized, the browser will be redirected to `selfservice.flows.recovery.ui_url` with the flow ID set as the query parameter `?flow=`. If a valid user session exists, the browser is returned to the configured return URL.  If this endpoint is called via an AJAX request, the response contains the recovery flow without any redirects or a 400 bad request error if the user is already authenticated.  This endpoint is NOT INTENDED for clients that do not have a browser (Chrome, Firefox, ...) as cookies are needed.  More information can be found at [Ory Kratos Account Recovery Documentation](../self-service/flows/account-recovery).
    * @summary Create Recovery Flow for Browsers
-   * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
+   * @param {FrontendApiCreateBrowserRecoveryFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public createBrowserRecoveryFlow(
-    returnTo?: string,
+    requestParameters: FrontendApiCreateBrowserRecoveryFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .createBrowserRecoveryFlow(returnTo, options)
+      .createBrowserRecoveryFlow(requestParameters.returnTo, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint initializes a browser-based user registration flow. This endpoint will set the appropriate cookies and anti-CSRF measures required for browser-based flows.  If this endpoint is opened as a link in the browser, it will be redirected to `selfservice.flows.registration.ui_url` with the flow ID set as the query parameter `?flow=`. If a valid user session exists already, the browser will be redirected to `urls.default_redirect_url`.  If this endpoint is called via an AJAX request, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration!  If this endpoint is called via an AJAX request, the response contains the registration flow without a redirect.  This endpoint is NOT INTENDED for clients that do not have a browser (Chrome, Firefox, ...) as cookies are needed.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
    * @summary Create Registration Flow for Browsers
-   * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
-   * @param {string} [loginChallenge] Ory OAuth 2.0 Login Challenge.  If set will cooperate with Ory OAuth2 and OpenID to act as an OAuth2 server / OpenID Provider.  The value for this parameter comes from &#x60;login_challenge&#x60; URL Query parameter sent to your application (e.g. &#x60;/registration?login_challenge&#x3D;abcde&#x60;).  This feature is compatible with Ory Hydra when not running on the Ory Network.
-   * @param {string} [afterVerificationReturnTo] The URL to return the browser to after the verification flow was completed.  After the registration flow is completed, the user will be sent a verification email. Upon completing the verification flow, this URL will be used to override the default &#x60;selfservice.flows.verification.after.default_redirect_to&#x60; value.
-   * @param {string} [organization]
+   * @param {FrontendApiCreateBrowserRegistrationFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public createBrowserRegistrationFlow(
-    returnTo?: string,
-    loginChallenge?: string,
-    afterVerificationReturnTo?: string,
-    organization?: string,
+    requestParameters: FrontendApiCreateBrowserRegistrationFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
       .createBrowserRegistrationFlow(
-        returnTo,
-        loginChallenge,
-        afterVerificationReturnTo,
-        organization,
+        requestParameters.returnTo,
+        requestParameters.loginChallenge,
+        requestParameters.afterVerificationReturnTo,
+        requestParameters.organization,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -7323,66 +8063,60 @@ export class FrontendApi extends BaseAPI {
   /**
    * This endpoint initializes a browser-based user settings flow. Once initialized, the browser will be redirected to `selfservice.flows.settings.ui_url` with the flow ID set as the query parameter `?flow=`. If no valid Ory Kratos Session Cookie is included in the request, a login flow will be initialized.  If this endpoint is opened as a link in the browser, it will be redirected to `selfservice.flows.settings.ui_url` with the flow ID set as the query parameter `?flow=`. If no valid user session was set, the browser will be redirected to the login endpoint.  If this endpoint is called via an AJAX request, the response contains the settings flow without any redirects or a 401 forbidden error if no valid session was set.  Depending on your configuration this endpoint might return a 403 error if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor (happens automatically for server-side browser flows) or change the configuration.  If this endpoint is called via an AJAX request, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `session_inactive`: No Ory Session was found - sign in a user first. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration!  This endpoint is NOT INTENDED for clients that do not have a browser (Chrome, Firefox, ...) as cookies are needed.  More information can be found at [Ory Kratos User Settings & Profile Management Documentation](../self-service/flows/user-settings).
    * @summary Create Settings Flow for Browsers
-   * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiCreateBrowserSettingsFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public createBrowserSettingsFlow(
-    returnTo?: string,
-    cookie?: string,
+    requestParameters: FrontendApiCreateBrowserSettingsFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .createBrowserSettingsFlow(returnTo, cookie, options)
+      .createBrowserSettingsFlow(
+        requestParameters.returnTo,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint initializes a browser-based account verification flow. Once initialized, the browser will be redirected to `selfservice.flows.verification.ui_url` with the flow ID set as the query parameter `?flow=`.  If this endpoint is called via an AJAX request, the response contains the recovery flow without any redirects.  This endpoint is NOT INTENDED for API clients and only works with browsers (Chrome, Firefox, ...).  More information can be found at [Ory Kratos Email and Phone Verification Documentation](https://www.ory.sh/docs/kratos/self-service/flows/verify-email-account-activation).
    * @summary Create Verification Flow for Browser Clients
-   * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
+   * @param {FrontendApiCreateBrowserVerificationFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public createBrowserVerificationFlow(
-    returnTo?: string,
+    requestParameters: FrontendApiCreateBrowserVerificationFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .createBrowserVerificationFlow(returnTo, options)
+      .createBrowserVerificationFlow(requestParameters.returnTo, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint initiates a login flow for native apps that do not use a browser, such as mobile devices, smart TVs, and so on.  If a valid provided session cookie or session token is provided, a 400 Bad Request error will be returned unless the URL query parameter `?refresh=true` is set.  To fetch an existing login flow call `/self-service/login/flows?flow=<flow_id>`.  You MUST NOT use this endpoint in client-side (Single Page Apps, ReactJS, AngularJS) nor server-side (Java Server Pages, NodeJS, PHP, Golang, ...) browser applications. Using this endpoint in these applications will make you vulnerable to a variety of CSRF attacks, including CSRF login attacks.  In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `session_aal1_required`: Multi-factor auth (e.g. 2fa) was requested but the user has no session yet. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred.  This endpoint MUST ONLY be used in scenarios such as native mobile apps (React Native, Objective C, Swift, Java, ...).  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
    * @summary Create Login Flow for Native Apps
-   * @param {boolean} [refresh] Refresh a login session  If set to true, this will refresh an existing login session by asking the user to sign in again. This will reset the authenticated_at time of the session.
-   * @param {string} [aal] Request a Specific AuthenticationMethod Assurance Level  Use this parameter to upgrade an existing session\&#39;s authenticator assurance level (AAL). This allows you to ask for multi-factor authentication. When an identity sign in using e.g. username+password, the AAL is 1. If you wish to \&quot;upgrade\&quot; the session\&#39;s security by asking the user to perform TOTP / WebAuth/ ... you would set this to \&quot;aal2\&quot;.
-   * @param {string} [xSessionToken] The Session Token of the Identity performing the settings flow.
-   * @param {boolean} [returnSessionTokenExchangeCode] EnableSessionTokenExchangeCode requests the login flow to include a code that can be used to retrieve the session token after the login flow has been completed.
-   * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
+   * @param {FrontendApiCreateNativeLoginFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public createNativeLoginFlow(
-    refresh?: boolean,
-    aal?: string,
-    xSessionToken?: string,
-    returnSessionTokenExchangeCode?: boolean,
-    returnTo?: string,
+    requestParameters: FrontendApiCreateNativeLoginFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
       .createNativeLoginFlow(
-        refresh,
-        aal,
-        xSessionToken,
-        returnSessionTokenExchangeCode,
-        returnTo,
+        requestParameters.refresh,
+        requestParameters.aal,
+        requestParameters.xSessionToken,
+        requestParameters.returnSessionTokenExchangeCode,
+        requestParameters.returnTo,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -7404,21 +8138,19 @@ export class FrontendApi extends BaseAPI {
   /**
    * This endpoint initiates a registration flow for API clients such as mobile devices, smart TVs, and so on.  If a valid provided session cookie or session token is provided, a 400 Bad Request error will be returned unless the URL query parameter `?refresh=true` is set.  To fetch an existing registration flow call `/self-service/registration/flows?flow=<flow_id>`.  You MUST NOT use this endpoint in client-side (Single Page Apps, ReactJS, AngularJS) nor server-side (Java Server Pages, NodeJS, PHP, Golang, ...) browser applications. Using this endpoint in these applications will make you vulnerable to a variety of CSRF attacks.  In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred.  This endpoint MUST ONLY be used in scenarios such as native mobile apps (React Native, Objective C, Swift, Java, ...).  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
    * @summary Create Registration Flow for Native Apps
-   * @param {boolean} [returnSessionTokenExchangeCode] EnableSessionTokenExchangeCode requests the login flow to include a code that can be used to retrieve the session token after the login flow has been completed.
-   * @param {string} [returnTo] The URL to return the browser to after the flow was completed.
+   * @param {FrontendApiCreateNativeRegistrationFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public createNativeRegistrationFlow(
-    returnSessionTokenExchangeCode?: boolean,
-    returnTo?: string,
+    requestParameters: FrontendApiCreateNativeRegistrationFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
       .createNativeRegistrationFlow(
-        returnSessionTokenExchangeCode,
-        returnTo,
+        requestParameters.returnSessionTokenExchangeCode,
+        requestParameters.returnTo,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -7427,17 +8159,17 @@ export class FrontendApi extends BaseAPI {
   /**
    * This endpoint initiates a settings flow for API clients such as mobile devices, smart TVs, and so on. You must provide a valid Ory Kratos Session Token for this endpoint to respond with HTTP 200 OK.  To fetch an existing settings flow call `/self-service/settings/flows?flow=<flow_id>`.  You MUST NOT use this endpoint in client-side (Single Page Apps, ReactJS, AngularJS) nor server-side (Java Server Pages, NodeJS, PHP, Golang, ...) browser applications. Using this endpoint in these applications will make you vulnerable to a variety of CSRF attacks.  Depending on your configuration this endpoint might return a 403 error if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor or change the configuration.  In the case of an error, the `error.id` of the JSON response body can be one of:  `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `session_inactive`: No Ory Session was found - sign in a user first.  This endpoint MUST ONLY be used in scenarios such as native mobile apps (React Native, Objective C, Swift, Java, ...).  More information can be found at [Ory Kratos User Settings & Profile Management Documentation](../self-service/flows/user-settings).
    * @summary Create Settings Flow for Native Apps
-   * @param {string} [xSessionToken] The Session Token of the Identity performing the settings flow.
+   * @param {FrontendApiCreateNativeSettingsFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public createNativeSettingsFlow(
-    xSessionToken?: string,
+    requestParameters: FrontendApiCreateNativeSettingsFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .createNativeSettingsFlow(xSessionToken, options)
+      .createNativeSettingsFlow(requestParameters.xSessionToken, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -7457,170 +8189,179 @@ export class FrontendApi extends BaseAPI {
   /**
    * Calling this endpoint invalidates all except the current session that belong to the logged-in user. Session data are not deleted.
    * @summary Disable my other sessions
-   * @param {string} [xSessionToken] Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
-   * @param {string} [cookie] Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+   * @param {FrontendApiDisableMyOtherSessionsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public disableMyOtherSessions(
-    xSessionToken?: string,
-    cookie?: string,
+    requestParameters: FrontendApiDisableMyOtherSessionsRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .disableMyOtherSessions(xSessionToken, cookie, options)
+      .disableMyOtherSessions(
+        requestParameters.xSessionToken,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Calling this endpoint invalidates the specified session. The current session cannot be revoked. Session data are not deleted.
    * @summary Disable one of my sessions
-   * @param {string} id ID is the session\&#39;s ID.
-   * @param {string} [xSessionToken] Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
-   * @param {string} [cookie] Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+   * @param {FrontendApiDisableMySessionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public disableMySession(
-    id: string,
-    xSessionToken?: string,
-    cookie?: string,
+    requestParameters: FrontendApiDisableMySessionRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .disableMySession(id, xSessionToken, cookie, options)
+      .disableMySession(
+        requestParameters.id,
+        requestParameters.xSessionToken,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *
    * @summary Exchange Session Token
-   * @param {string} initCode The part of the code return when initializing the flow.
-   * @param {string} returnToCode The part of the code returned by the return_to URL.
+   * @param {FrontendApiExchangeSessionTokenRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public exchangeSessionToken(
-    initCode: string,
-    returnToCode: string,
+    requestParameters: FrontendApiExchangeSessionTokenRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .exchangeSessionToken(initCode, returnToCode, options)
+      .exchangeSessionToken(
+        requestParameters.initCode,
+        requestParameters.returnToCode,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint returns the error associated with a user-facing self service errors.  This endpoint supports stub values to help you implement the error UI:  `?id=stub:500` - returns a stub 500 (Internal Server Error) error.  More information can be found at [Ory Kratos User User Facing Error Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-facing-errors).
    * @summary Get User-Flow Errors
-   * @param {string} id Error is the error\&#39;s ID
+   * @param {FrontendApiGetFlowErrorRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
-  public getFlowError(id: string, options?: AxiosRequestConfig) {
+  public getFlowError(
+    requestParameters: FrontendApiGetFlowErrorRequest,
+    options?: AxiosRequestConfig
+  ) {
     return FrontendApiFp(this.configuration)
-      .getFlowError(id, options)
+      .getFlowError(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint returns a login flow\'s context with, for example, error details and other information.  Browser flows expect the anti-CSRF cookie to be included in the request\'s HTTP Cookie Header. For AJAX requests you must ensure that cookies are included in the request or requests will fail.  If you use the browser-flow for server-side apps, the services need to run on a common top-level-domain and you need to forward the incoming HTTP Cookie header to this endpoint:  ```js pseudo-code example router.get(\'/login\', async function (req, res) { const flow = await client.getLoginFlow(req.header(\'cookie\'), req.query[\'flow\'])  res.render(\'login\', flow) }) ```  This request may fail due to several reasons. The `error.id` can be one of:  `session_already_available`: The user is already signed in. `self_service_flow_expired`: The flow is expired and you should request a new one.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
    * @summary Get Login Flow
-   * @param {string} id The Login Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/login?flow&#x3D;abcde&#x60;).
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiGetLoginFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public getLoginFlow(
-    id: string,
-    cookie?: string,
+    requestParameters: FrontendApiGetLoginFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .getLoginFlow(id, cookie, options)
+      .getLoginFlow(requestParameters.id, requestParameters.cookie, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint returns a recovery flow\'s context with, for example, error details and other information.  Browser flows expect the anti-CSRF cookie to be included in the request\'s HTTP Cookie Header. For AJAX requests you must ensure that cookies are included in the request or requests will fail.  If you use the browser-flow for server-side apps, the services need to run on a common top-level-domain and you need to forward the incoming HTTP Cookie header to this endpoint:  ```js pseudo-code example router.get(\'/recovery\', async function (req, res) { const flow = await client.getRecoveryFlow(req.header(\'Cookie\'), req.query[\'flow\'])  res.render(\'recovery\', flow) }) ```  More information can be found at [Ory Kratos Account Recovery Documentation](../self-service/flows/account-recovery).
    * @summary Get Recovery Flow
-   * @param {string} id The Flow ID  The value for this parameter comes from &#x60;request&#x60; URL Query parameter sent to your application (e.g. &#x60;/recovery?flow&#x3D;abcde&#x60;).
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiGetRecoveryFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public getRecoveryFlow(
-    id: string,
-    cookie?: string,
+    requestParameters: FrontendApiGetRecoveryFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .getRecoveryFlow(id, cookie, options)
+      .getRecoveryFlow(requestParameters.id, requestParameters.cookie, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint returns a registration flow\'s context with, for example, error details and other information.  Browser flows expect the anti-CSRF cookie to be included in the request\'s HTTP Cookie Header. For AJAX requests you must ensure that cookies are included in the request or requests will fail.  If you use the browser-flow for server-side apps, the services need to run on a common top-level-domain and you need to forward the incoming HTTP Cookie header to this endpoint:  ```js pseudo-code example router.get(\'/registration\', async function (req, res) { const flow = await client.getRegistrationFlow(req.header(\'cookie\'), req.query[\'flow\'])  res.render(\'registration\', flow) }) ```  This request may fail due to several reasons. The `error.id` can be one of:  `session_already_available`: The user is already signed in. `self_service_flow_expired`: The flow is expired and you should request a new one.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
    * @summary Get Registration Flow
-   * @param {string} id The Registration Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/registration?flow&#x3D;abcde&#x60;).
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiGetRegistrationFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public getRegistrationFlow(
-    id: string,
-    cookie?: string,
+    requestParameters: FrontendApiGetRegistrationFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .getRegistrationFlow(id, cookie, options)
+      .getRegistrationFlow(
+        requestParameters.id,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * When accessing this endpoint through Ory Kratos\' Public API you must ensure that either the Ory Kratos Session Cookie or the Ory Kratos Session Token are set.  Depending on your configuration this endpoint might return a 403 error if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor or change the configuration.  You can access this endpoint without credentials when using Ory Kratos\' Admin API.  If this endpoint is called via an AJAX request, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `session_inactive`: No Ory Session was found - sign in a user first. `security_identity_mismatch`: The flow was interrupted with `session_refresh_required` but apparently some other identity logged in instead.  More information can be found at [Ory Kratos User Settings & Profile Management Documentation](../self-service/flows/user-settings).
    * @summary Get Settings Flow
-   * @param {string} id ID is the Settings Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/settings?flow&#x3D;abcde&#x60;).
-   * @param {string} [xSessionToken] The Session Token  When using the SDK in an app without a browser, please include the session token here.
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiGetSettingsFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public getSettingsFlow(
-    id: string,
-    xSessionToken?: string,
-    cookie?: string,
+    requestParameters: FrontendApiGetSettingsFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .getSettingsFlow(id, xSessionToken, cookie, options)
+      .getSettingsFlow(
+        requestParameters.id,
+        requestParameters.xSessionToken,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint returns a verification flow\'s context with, for example, error details and other information.  Browser flows expect the anti-CSRF cookie to be included in the request\'s HTTP Cookie Header. For AJAX requests you must ensure that cookies are included in the request or requests will fail.  If you use the browser-flow for server-side apps, the services need to run on a common top-level-domain and you need to forward the incoming HTTP Cookie header to this endpoint:  ```js pseudo-code example router.get(\'/recovery\', async function (req, res) { const flow = await client.getVerificationFlow(req.header(\'cookie\'), req.query[\'flow\'])  res.render(\'verification\', flow) }) ```  More information can be found at [Ory Kratos Email and Phone Verification Documentation](https://www.ory.sh/docs/kratos/self-service/flows/verify-email-account-activation).
    * @summary Get Verification Flow
-   * @param {string} id The Flow ID  The value for this parameter comes from &#x60;request&#x60; URL Query parameter sent to your application (e.g. &#x60;/verification?flow&#x3D;abcde&#x60;).
-   * @param {string} [cookie] HTTP Cookies  When using the SDK on the server side you must include the HTTP Cookie Header originally sent to your HTTP handler here.
+   * @param {FrontendApiGetVerificationFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public getVerificationFlow(
-    id: string,
-    cookie?: string,
+    requestParameters: FrontendApiGetVerificationFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .getVerificationFlow(id, cookie, options)
+      .getVerificationFlow(
+        requestParameters.id,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -7640,33 +8381,23 @@ export class FrontendApi extends BaseAPI {
   /**
    * This endpoints returns all other active sessions that belong to the logged-in user. The current session can be retrieved by calling the `/sessions/whoami` endpoint.
    * @summary Get My Active Sessions
-   * @param {number} [perPage] Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
-   * @param {number} [page] Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
-   * @param {number} [pageSize] Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {string} [xSessionToken] Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
-   * @param {string} [cookie] Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
+   * @param {FrontendApiListMySessionsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public listMySessions(
-    perPage?: number,
-    page?: number,
-    pageSize?: number,
-    pageToken?: string,
-    xSessionToken?: string,
-    cookie?: string,
+    requestParameters: FrontendApiListMySessionsRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
       .listMySessions(
-        perPage,
-        page,
-        pageSize,
-        pageToken,
-        xSessionToken,
-        cookie,
+        requestParameters.perPage,
+        requestParameters.page,
+        requestParameters.pageSize,
+        requestParameters.pageToken,
+        requestParameters.xSessionToken,
+        requestParameters.cookie,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -7675,172 +8406,175 @@ export class FrontendApi extends BaseAPI {
   /**
    * Use this endpoint to log out an identity using an Ory Session Token. If the Ory Session Token was successfully revoked, the server returns a 204 No Content response. A 204 No Content response is also sent when the Ory Session Token has been revoked already before.  If the Ory Session Token is malformed or does not exist a 403 Forbidden response will be returned.  This endpoint does not remove any HTTP Cookies - use the Browser-Based Self-Service Logout Flow instead.
    * @summary Perform Logout for Native Apps
-   * @param {PerformNativeLogoutBody} body
+   * @param {FrontendApiPerformNativeLogoutRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public performNativeLogout(
-    body: PerformNativeLogoutBody,
+    requestParameters: FrontendApiPerformNativeLogoutRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .performNativeLogout(body, options)
+      .performNativeLogout(requestParameters.body, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Uses the HTTP Headers in the GET request to determine (e.g. by using checking the cookies) who is authenticated. Returns a session object in the body or 401 if the credentials are invalid or no credentials were sent. When the request it successful it adds the user ID to the \'X-Kratos-Authenticated-Identity-Id\' header in the response.  If you call this endpoint from a server-side application, you must forward the HTTP Cookie Header to this endpoint:  ```js pseudo-code example router.get(\'/protected-endpoint\', async function (req, res) { const session = await client.toSession(undefined, req.header(\'cookie\'))  console.log(session) }) ```  When calling this endpoint from a non-browser application (e.g. mobile app) you must include the session token:  ```js pseudo-code example ... const session = await client.toSession(\"the-session-token\")  console.log(session) ```  When using a token template, the token is included in the `tokenized` field of the session.  ```js pseudo-code example ... const session = await client.toSession(\"the-session-token\", { tokenize_as: \"example-jwt-template\" })  console.log(session.tokenized) // The JWT ```  Depending on your configuration this endpoint might return a 403 status code if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor or change the configuration.  This endpoint is useful for:  AJAX calls. Remember to send credentials and set up CORS correctly! Reverse proxies and API Gateways Server-side calls - use the `X-Session-Token` header!  This endpoint authenticates users by checking:  if the `Cookie` HTTP header was set containing an Ory Kratos Session Cookie; if the `Authorization: bearer <ory-session-token>` HTTP header was set with a valid Ory Kratos Session Token; if the `X-Session-Token` HTTP header was set with a valid Ory Kratos Session Token.  If none of these headers are set or the cookie or token are invalid, the endpoint returns a HTTP 401 status code.  As explained above, this request may fail due to several reasons. The `error.id` can be one of:  `session_inactive`: No active session was found in the request (e.g. no Ory Session Cookie / Ory Session Token). `session_aal2_required`: An active session was found but it does not fulfil the Authenticator Assurance Level, implying that the session must (e.g.) authenticate the second factor.
    * @summary Check Who the Current HTTP Session Belongs To
-   * @param {string} [xSessionToken] Set the Session Token when calling from non-browser clients. A session token has a format of &#x60;MP2YWEMeM8MxjkGKpH4dqOQ4Q4DlSPaj&#x60;.
-   * @param {string} [cookie] Set the Cookie Header. This is especially useful when calling this endpoint from a server-side application. In that scenario you must include the HTTP Cookie Header which originally was included in the request to your server. An example of a session in the HTTP Cookie Header is: &#x60;ory_kratos_session&#x3D;a19iOVAbdzdgl70Rq1QZmrKmcjDtdsviCTZx7m9a9yHIUS8Wa9T7hvqyGTsLHi6Qifn2WUfpAKx9DWp0SJGleIn9vh2YF4A16id93kXFTgIgmwIOvbVAScyrx7yVl6bPZnCx27ec4WQDtaTewC1CpgudeDV2jQQnSaCP6ny3xa8qLH-QUgYqdQuoA_LF1phxgRCUfIrCLQOkolX5nv3ze_f&#x3D;&#x3D;&#x60;.  It is ok if more than one cookie are included here as all other cookies will be ignored.
-   * @param {string} [tokenizeAs] Returns the session additionally as a token (such as a JWT)  The value of this parameter has to be a valid, configured Ory Session token template. For more information head over to [the documentation](http://ory.sh/docs/identities/session-to-jwt-cors).
+   * @param {FrontendApiToSessionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public toSession(
-    xSessionToken?: string,
-    cookie?: string,
-    tokenizeAs?: string,
+    requestParameters: FrontendApiToSessionRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .toSession(xSessionToken, cookie, tokenizeAs, options)
+      .toSession(
+        requestParameters.xSessionToken,
+        requestParameters.cookie,
+        requestParameters.tokenizeAs,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Use this endpoint to complete a login flow. This endpoint behaves differently for API and browser flows.  API flows expect `application/json` to be sent in the body and responds with HTTP 200 and a application/json body with the session token on success; HTTP 410 if the original flow expired with the appropriate error messages set and optionally a `use_flow_id` parameter in the body; HTTP 400 on form validation errors.  Browser flows expect a Content-Type of `application/x-www-form-urlencoded` or `application/json` to be sent in the body and respond with a HTTP 303 redirect to the post/after login URL or the `return_to` value if it was set and if the login succeeded; a HTTP 303 redirect to the login UI URL with the flow ID containing the validation errors otherwise.  Browser flows with an accept header of `application/json` will not redirect but instead respond with HTTP 200 and a application/json body with the signed in identity and a `Set-Cookie` header on success; HTTP 303 redirect to a fresh login flow if the original flow expired with the appropriate error messages set; HTTP 400 on form validation errors.  If this endpoint is called with `Accept: application/json` in the header, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration! `browser_location_change_required`: Usually sent when an AJAX request indicates that the browser needs to open a specific URL. Most likely used in Social Sign In flows.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
    * @summary Submit a Login Flow
-   * @param {string} flow The Login Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/login?flow&#x3D;abcde&#x60;).
-   * @param {object} body
-   * @param {string} [xSessionToken] The Session Token of the Identity performing the settings flow.
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiUpdateLoginFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public updateLoginFlow(
-    flow: string,
-    body: object,
-    xSessionToken?: string,
-    cookie?: string,
+    requestParameters: FrontendApiUpdateLoginFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .updateLoginFlow(flow, body, xSessionToken, cookie, options)
+      .updateLoginFlow(
+        requestParameters.flow,
+        requestParameters.body,
+        requestParameters.xSessionToken,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint logs out an identity in a self-service manner.  If the `Accept` HTTP header is not set to `application/json`, the browser will be redirected (HTTP 303 See Other) to the `return_to` parameter of the initial request or fall back to `urls.default_return_to`.  If the `Accept` HTTP header is set to `application/json`, a 204 No Content response will be sent on successful logout instead.  This endpoint is NOT INTENDED for API clients and only works with browsers (Chrome, Firefox, ...). For API clients you can call the `/self-service/logout/api` URL directly with the Ory Session Token.  More information can be found at [Ory Kratos User Logout Documentation](https://www.ory.sh/docs/next/kratos/self-service/flows/user-logout).
    * @summary Update Logout Flow
-   * @param {string} [token] A Valid Logout Token  If you do not have a logout token because you only have a session cookie, call &#x60;/self-service/logout/browser&#x60; to generate a URL for this endpoint.
-   * @param {string} [returnTo] The URL to return to after the logout was completed.
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiUpdateLogoutFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public updateLogoutFlow(
-    token?: string,
-    returnTo?: string,
-    cookie?: string,
+    requestParameters: FrontendApiUpdateLogoutFlowRequest = {},
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .updateLogoutFlow(token, returnTo, cookie, options)
+      .updateLogoutFlow(
+        requestParameters.token,
+        requestParameters.returnTo,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Use this endpoint to update a recovery flow. This endpoint behaves differently for API and browser flows and has several states:  `choose_method` expects `flow` (in the URL query) and `email` (in the body) to be sent and works with API- and Browser-initiated flows. For API clients and Browser clients with HTTP Header `Accept: application/json` it either returns a HTTP 200 OK when the form is valid and HTTP 400 OK when the form is invalid. and a HTTP 303 See Other redirect with a fresh recovery flow if the flow was otherwise invalid (e.g. expired). For Browser clients without HTTP Header `Accept` or with `Accept: text/_*` it returns a HTTP 303 See Other redirect to the Recovery UI URL with the Recovery Flow ID appended. `sent_email` is the success state after `choose_method` for the `link` method and allows the user to request another recovery email. It works for both API and Browser-initiated flows and returns the same responses as the flow in `choose_method` state. `passed_challenge` expects a `token` to be sent in the URL query and given the nature of the flow (\"sending a recovery link\") does not have any API capabilities. The server responds with a HTTP 303 See Other redirect either to the Settings UI URL (if the link was valid) and instructs the user to update their password, or a redirect to the Recover UI URL with a new Recovery Flow ID which contains an error message that the recovery link was invalid.  More information can be found at [Ory Kratos Account Recovery Documentation](../self-service/flows/account-recovery).
    * @summary Update Recovery Flow
-   * @param {string} flow The Recovery Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/recovery?flow&#x3D;abcde&#x60;).
-   * @param {object} body
-   * @param {string} [token] Recovery Token  The recovery token which completes the recovery request. If the token is invalid (e.g. expired) an error will be shown to the end-user.  This parameter is usually set in a link and not used by any direct API call.
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiUpdateRecoveryFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public updateRecoveryFlow(
-    flow: string,
-    body: object,
-    token?: string,
-    cookie?: string,
+    requestParameters: FrontendApiUpdateRecoveryFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .updateRecoveryFlow(flow, body, token, cookie, options)
+      .updateRecoveryFlow(
+        requestParameters.flow,
+        requestParameters.body,
+        requestParameters.token,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Use this endpoint to complete a registration flow by sending an identity\'s traits and password. This endpoint behaves differently for API and browser flows.  API flows expect `application/json` to be sent in the body and respond with HTTP 200 and a application/json body with the created identity success - if the session hook is configured the `session` and `session_token` will also be included; HTTP 410 if the original flow expired with the appropriate error messages set and optionally a `use_flow_id` parameter in the body; HTTP 400 on form validation errors.  Browser flows expect a Content-Type of `application/x-www-form-urlencoded` or `application/json` to be sent in the body and respond with a HTTP 303 redirect to the post/after registration URL or the `return_to` value if it was set and if the registration succeeded; a HTTP 303 redirect to the registration UI URL with the flow ID containing the validation errors otherwise.  Browser flows with an accept header of `application/json` will not redirect but instead respond with HTTP 200 and a application/json body with the signed in identity and a `Set-Cookie` header on success; HTTP 303 redirect to a fresh login flow if the original flow expired with the appropriate error messages set; HTTP 400 on form validation errors.  If this endpoint is called with `Accept: application/json` in the header, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_already_available`: The user is already signed in. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration! `browser_location_change_required`: Usually sent when an AJAX request indicates that the browser needs to open a specific URL. Most likely used in Social Sign In flows.  More information can be found at [Ory Kratos User Login](https://www.ory.sh/docs/kratos/self-service/flows/user-login) and [User Registration Documentation](https://www.ory.sh/docs/kratos/self-service/flows/user-registration).
    * @summary Update Registration Flow
-   * @param {string} flow The Registration Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/registration?flow&#x3D;abcde&#x60;).
-   * @param {object} body
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiUpdateRegistrationFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public updateRegistrationFlow(
-    flow: string,
-    body: object,
-    cookie?: string,
+    requestParameters: FrontendApiUpdateRegistrationFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .updateRegistrationFlow(flow, body, cookie, options)
+      .updateRegistrationFlow(
+        requestParameters.flow,
+        requestParameters.body,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Use this endpoint to complete a settings flow by sending an identity\'s updated password. This endpoint behaves differently for API and browser flows.  API-initiated flows expect `application/json` to be sent in the body and respond with HTTP 200 and an application/json body with the session token on success; HTTP 303 redirect to a fresh settings flow if the original flow expired with the appropriate error messages set; HTTP 400 on form validation errors. HTTP 401 when the endpoint is called without a valid session token. HTTP 403 when `selfservice.flows.settings.privileged_session_max_age` was reached or the session\'s AAL is too low. Implies that the user needs to re-authenticate.  Browser flows without HTTP Header `Accept` or with `Accept: text/_*` respond with a HTTP 303 redirect to the post/after settings URL or the `return_to` value if it was set and if the flow succeeded; a HTTP 303 redirect to the Settings UI URL with the flow ID containing the validation errors otherwise. a HTTP 303 redirect to the login endpoint when `selfservice.flows.settings.privileged_session_max_age` was reached or the session\'s AAL is too low.  Browser flows with HTTP Header `Accept: application/json` respond with HTTP 200 and a application/json body with the signed in identity and a `Set-Cookie` header on success; HTTP 303 redirect to a fresh login flow if the original flow expired with the appropriate error messages set; HTTP 401 when the endpoint is called without a valid session cookie. HTTP 403 when the page is accessed without a session cookie or the session\'s AAL is too low. HTTP 400 on form validation errors.  Depending on your configuration this endpoint might return a 403 error if the session has a lower Authenticator Assurance Level (AAL) than is possible for the identity. This can happen if the identity has password + webauthn credentials (which would result in AAL2) but the session has only AAL1. If this error occurs, ask the user to sign in with the second factor (happens automatically for server-side browser flows) or change the configuration.  If this endpoint is called with a `Accept: application/json` HTTP header, the response contains the flow without a redirect. In the case of an error, the `error.id` of the JSON response body can be one of:  `session_refresh_required`: The identity requested to change something that needs a privileged session. Redirect the identity to the login init endpoint with query parameters `?refresh=true&return_to=<the-current-browser-url>`, or initiate a refresh login flow otherwise. `security_csrf_violation`: Unable to fetch the flow because a CSRF violation occurred. `session_inactive`: No Ory Session was found - sign in a user first. `security_identity_mismatch`: The flow was interrupted with `session_refresh_required` but apparently some other identity logged in instead. `security_identity_mismatch`: The requested `?return_to` address is not allowed to be used. Adjust this in the configuration! `browser_location_change_required`: Usually sent when an AJAX request indicates that the browser needs to open a specific URL. Most likely used in Social Sign In flows.  More information can be found at [Ory Kratos User Settings & Profile Management Documentation](../self-service/flows/user-settings).
    * @summary Complete Settings Flow
-   * @param {string} flow The Settings Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/settings?flow&#x3D;abcde&#x60;).
-   * @param {object} body
-   * @param {string} [xSessionToken] The Session Token of the Identity performing the settings flow.
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiUpdateSettingsFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public updateSettingsFlow(
-    flow: string,
-    body: object,
-    xSessionToken?: string,
-    cookie?: string,
+    requestParameters: FrontendApiUpdateSettingsFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .updateSettingsFlow(flow, body, xSessionToken, cookie, options)
+      .updateSettingsFlow(
+        requestParameters.flow,
+        requestParameters.body,
+        requestParameters.xSessionToken,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Use this endpoint to complete a verification flow. This endpoint behaves differently for API and browser flows and has several states:  `choose_method` expects `flow` (in the URL query) and `email` (in the body) to be sent and works with API- and Browser-initiated flows. For API clients and Browser clients with HTTP Header `Accept: application/json` it either returns a HTTP 200 OK when the form is valid and HTTP 400 OK when the form is invalid and a HTTP 303 See Other redirect with a fresh verification flow if the flow was otherwise invalid (e.g. expired). For Browser clients without HTTP Header `Accept` or with `Accept: text/_*` it returns a HTTP 303 See Other redirect to the Verification UI URL with the Verification Flow ID appended. `sent_email` is the success state after `choose_method` when using the `link` method and allows the user to request another verification email. It works for both API and Browser-initiated flows and returns the same responses as the flow in `choose_method` state. `passed_challenge` expects a `token` to be sent in the URL query and given the nature of the flow (\"sending a verification link\") does not have any API capabilities. The server responds with a HTTP 303 See Other redirect either to the Settings UI URL (if the link was valid) and instructs the user to update their password, or a redirect to the Verification UI URL with a new Verification Flow ID which contains an error message that the verification link was invalid.  More information can be found at [Ory Kratos Email and Phone Verification Documentation](https://www.ory.sh/docs/kratos/self-service/flows/verify-email-account-activation).
    * @summary Complete Verification Flow
-   * @param {string} flow The Verification Flow ID  The value for this parameter comes from &#x60;flow&#x60; URL Query parameter sent to your application (e.g. &#x60;/verification?flow&#x3D;abcde&#x60;).
-   * @param {object} body
-   * @param {string} [token] Verification Token  The verification token which completes the verification request. If the token is invalid (e.g. expired) an error will be shown to the end-user.  This parameter is usually set in a link and not used by any direct API call.
-   * @param {string} [cookie] HTTP Cookies  When using the SDK in a browser app, on the server side you must include the HTTP Cookie Header sent by the client to your server here. This ensures that CSRF and session cookies are respected.
+   * @param {FrontendApiUpdateVerificationFlowRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FrontendApi
    */
   public updateVerificationFlow(
-    flow: string,
-    body: object,
-    token?: string,
-    cookie?: string,
+    requestParameters: FrontendApiUpdateVerificationFlowRequest,
     options?: AxiosRequestConfig
   ) {
     return FrontendApiFp(this.configuration)
-      .updateVerificationFlow(flow, body, token, cookie, options)
+      .updateVerificationFlow(
+        requestParameters.flow,
+        requestParameters.body,
+        requestParameters.token,
+        requestParameters.cookie,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -8011,7 +8745,7 @@ export const HealthApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    isInstanceAlive(options?: any): AxiosPromise<HealthStatus> {
+    isInstanceAlive(options?: AxiosRequestConfig): AxiosPromise<HealthStatus> {
       return localVarFp
         .isInstanceAlive(options)
         .then((request) => request(axios, basePath));
@@ -8022,7 +8756,7 @@ export const HealthApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    isInstanceReady(options?: any): AxiosPromise<HealthStatus> {
+    isInstanceReady(options?: AxiosRequestConfig): AxiosPromise<HealthStatus> {
       return localVarFp
         .isInstanceReady(options)
         .then((request) => request(axios, basePath));
@@ -9779,209 +10513,212 @@ export const IdentityApiFactory = function (
     /**
      * Creates or delete multiple [identities](https://www.ory.sh/docs/kratos/concepts/identity-user-model). This endpoint can also be used to [import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities) for instance passwords, social sign in configurations or multifactor methods.
      * @summary Create and deletes multiple identities
-     * @param {PatchIdentitiesBody} [body]
+     * @param {IdentityApiBatchPatchIdentitiesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     batchPatchIdentities(
-      body?: PatchIdentitiesBody,
-      options?: any
+      requestParameters: IdentityApiBatchPatchIdentitiesRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<BatchPatchIdentitiesResponse> {
       return localVarFp
-        .batchPatchIdentities(body, options)
+        .batchPatchIdentities(requestParameters.body, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * Create an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model).  This endpoint can also be used to [import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities) for instance passwords, social sign in configurations or multifactor methods.
      * @summary Create an Identity
-     * @param {CreateIdentityBody} [body]
+     * @param {IdentityApiCreateIdentityRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createIdentity(
-      body?: CreateIdentityBody,
-      options?: any
+      requestParameters: IdentityApiCreateIdentityRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<Identity> {
       return localVarFp
-        .createIdentity(body, options)
+        .createIdentity(requestParameters.body, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint creates a recovery code which should be given to the user in order for them to recover (or activate) their account.
      * @summary Create a Recovery Code
-     * @param {CreateRecoveryCodeForIdentityBody} [body]
+     * @param {IdentityApiCreateRecoveryCodeForIdentityRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createRecoveryCodeForIdentity(
-      body?: CreateRecoveryCodeForIdentityBody,
-      options?: any
+      requestParameters: IdentityApiCreateRecoveryCodeForIdentityRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<RecoveryCodeForIdentity> {
       return localVarFp
-        .createRecoveryCodeForIdentity(body, options)
+        .createRecoveryCodeForIdentity(requestParameters.body, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint creates a recovery link which should be given to the user in order for them to recover (or activate) their account.
      * @summary Create a Recovery Link
-     * @param {CreateRecoveryLinkForIdentityBody} [body]
+     * @param {IdentityApiCreateRecoveryLinkForIdentityRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createRecoveryLinkForIdentity(
-      body?: CreateRecoveryLinkForIdentityBody,
-      options?: any
+      requestParameters: IdentityApiCreateRecoveryLinkForIdentityRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<RecoveryLinkForIdentity> {
       return localVarFp
-        .createRecoveryLinkForIdentity(body, options)
+        .createRecoveryLinkForIdentity(requestParameters.body, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * Calling this endpoint irrecoverably and permanently deletes the [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) given its ID. This action can not be undone. This endpoint returns 204 when the identity was deleted or when the identity was not found, in which case it is assumed that is has been deleted already.
      * @summary Delete an Identity
-     * @param {string} id ID is the identity\&#39;s ID.
+     * @param {IdentityApiDeleteIdentityRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteIdentity(id: string, options?: any): AxiosPromise<void> {
+    deleteIdentity(
+      requestParameters: IdentityApiDeleteIdentityRequest,
+      options?: AxiosRequestConfig
+    ): AxiosPromise<void> {
       return localVarFp
-        .deleteIdentity(id, options)
+        .deleteIdentity(requestParameters.id, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * Delete an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) credential by its type You can only delete second factor (aal2) credentials.
      * @summary Delete a credential for a specific identity
-     * @param {string} id ID is the identity\&#39;s ID.
-     * @param {DeleteIdentityCredentialsTypeEnum} type Type is the credential\&#39;s Type. One of totp, webauthn, lookup
+     * @param {IdentityApiDeleteIdentityCredentialsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     deleteIdentityCredentials(
-      id: string,
-      type: DeleteIdentityCredentialsTypeEnum,
-      options?: any
+      requestParameters: IdentityApiDeleteIdentityCredentialsRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<void> {
       return localVarFp
-        .deleteIdentityCredentials(id, type, options)
+        .deleteIdentityCredentials(
+          requestParameters.id,
+          requestParameters.type,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * Calling this endpoint irrecoverably and permanently deletes and invalidates all sessions that belong to the given Identity.
      * @summary Delete & Invalidate an Identity\'s Sessions
-     * @param {string} id ID is the identity\&#39;s ID.
+     * @param {IdentityApiDeleteIdentitySessionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteIdentitySessions(id: string, options?: any): AxiosPromise<void> {
+    deleteIdentitySessions(
+      requestParameters: IdentityApiDeleteIdentitySessionsRequest,
+      options?: AxiosRequestConfig
+    ): AxiosPromise<void> {
       return localVarFp
-        .deleteIdentitySessions(id, options)
+        .deleteIdentitySessions(requestParameters.id, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * Calling this endpoint deactivates the specified session. Session data is not deleted.
      * @summary Deactivate a Session
-     * @param {string} id ID is the session\&#39;s ID.
+     * @param {IdentityApiDisableSessionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    disableSession(id: string, options?: any): AxiosPromise<void> {
+    disableSession(
+      requestParameters: IdentityApiDisableSessionRequest,
+      options?: AxiosRequestConfig
+    ): AxiosPromise<void> {
       return localVarFp
-        .disableSession(id, options)
+        .disableSession(requestParameters.id, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * Calling this endpoint extends the given session ID. If `session.earliest_possible_extend` is set it will only extend the session after the specified time has passed.  Retrieve the session ID from the `/sessions/whoami` endpoint / `toSession` SDK method.
      * @summary Extend a Session
-     * @param {string} id ID is the session\&#39;s ID.
+     * @param {IdentityApiExtendSessionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    extendSession(id: string, options?: any): AxiosPromise<Session> {
+    extendSession(
+      requestParameters: IdentityApiExtendSessionRequest,
+      options?: AxiosRequestConfig
+    ): AxiosPromise<Session> {
       return localVarFp
-        .extendSession(id, options)
+        .extendSession(requestParameters.id, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * Return an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) by its ID. You can optionally include credentials (e.g. social sign in connections) in the response by using the `include_credential` query parameter.
      * @summary Get an Identity
-     * @param {string} id ID must be set to the ID of identity you want to get
-     * @param {Array<string>} [includeCredential] Include Credentials in Response  Include any credential, for example &#x60;password&#x60; or &#x60;oidc&#x60;, in the response. When set to &#x60;oidc&#x60;, This will return the initial OAuth 2.0 Access Token, OAuth 2.0 Refresh Token and the OpenID Connect ID Token if available.
+     * @param {IdentityApiGetIdentityRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getIdentity(
-      id: string,
-      includeCredential?: Array<string>,
-      options?: any
+      requestParameters: IdentityApiGetIdentityRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<Identity> {
       return localVarFp
-        .getIdentity(id, includeCredential, options)
+        .getIdentity(
+          requestParameters.id,
+          requestParameters.includeCredential,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * Return a specific identity schema.
      * @summary Get Identity JSON Schema
-     * @param {string} id ID must be set to the ID of schema you want to get
+     * @param {IdentityApiGetIdentitySchemaRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getIdentitySchema(id: string, options?: any): AxiosPromise<object> {
+    getIdentitySchema(
+      requestParameters: IdentityApiGetIdentitySchemaRequest,
+      options?: AxiosRequestConfig
+    ): AxiosPromise<object> {
       return localVarFp
-        .getIdentitySchema(id, options)
+        .getIdentitySchema(requestParameters.id, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint is useful for:  Getting a session object with all specified expandables that exist in an administrative context.
      * @summary Get Session
-     * @param {string} id ID is the session\&#39;s ID.
-     * @param {GetSessionExpandEnum} [expand] ExpandOptions is a query parameter encoded list of all properties that must be expanded in the Session. Example - ?expand&#x3D;Identity&amp;expand&#x3D;Devices If no value is provided, the expandable properties are skipped.
+     * @param {IdentityApiGetSessionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getSession(
-      id: string,
-      expand?: GetSessionExpandEnum,
-      options?: any
+      requestParameters: IdentityApiGetSessionRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<Session> {
       return localVarFp
-        .getSession(id, expand, options)
+        .getSession(requestParameters.id, requestParameters.expand, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * Lists all [identities](https://www.ory.sh/docs/kratos/concepts/identity-user-model) in the system.
      * @summary List Identities
-     * @param {number} [perPage] Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
-     * @param {number} [page] Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
-     * @param {number} [pageSize] Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {ListIdentitiesConsistencyEnum} [consistency] Read Consistency Level (preview)  The read consistency level determines the consistency guarantee for reads:  strong (slow): The read is guaranteed to return the most recent data committed at the start of the read. eventual (very fast): The result will return data that is about 4.8 seconds old.  The default consistency guarantee can be changed in the Ory Network Console or using the Ory CLI with &#x60;ory patch project --replace \&#39;/previews/default_read_consistency_level&#x3D;\&quot;strong\&quot;\&#39;&#x60;.  Setting the default consistency level to &#x60;eventual&#x60; may cause regressions in the future as we add consistency controls to more APIs. Currently, the following APIs will be affected by this setting:  &#x60;GET /admin/identities&#x60;  This feature is in preview and only available in Ory Network.  ConsistencyLevelUnset  ConsistencyLevelUnset is the unset / default consistency level. strong ConsistencyLevelStrong  ConsistencyLevelStrong is the strong consistency level. eventual ConsistencyLevelEventual  ConsistencyLevelEventual is the eventual consistency level using follower read timestamps.
-     * @param {Array<string>} [ids] List of ids used to filter identities. If this list is empty, then no filter will be applied.
-     * @param {string} [credentialsIdentifier] CredentialsIdentifier is the identifier (username, email) of the credentials to look up using exact match. Only one of CredentialsIdentifier and CredentialsIdentifierSimilar can be used.
-     * @param {string} [previewCredentialsIdentifierSimilar] This is an EXPERIMENTAL parameter that WILL CHANGE. Do NOT rely on consistent, deterministic behavior. THIS PARAMETER WILL BE REMOVED IN AN UPCOMING RELEASE WITHOUT ANY MIGRATION PATH.  CredentialsIdentifierSimilar is the (partial) identifier (username, email) of the credentials to look up using similarity search. Only one of CredentialsIdentifier and CredentialsIdentifierSimilar can be used.
+     * @param {IdentityApiListIdentitiesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listIdentities(
-      perPage?: number,
-      page?: number,
-      pageSize?: number,
-      pageToken?: string,
-      consistency?: ListIdentitiesConsistencyEnum,
-      ids?: Array<string>,
-      credentialsIdentifier?: string,
-      previewCredentialsIdentifierSimilar?: string,
-      options?: any
+      requestParameters: IdentityApiListIdentitiesRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<Array<Identity>> {
       return localVarFp
         .listIdentities(
-          perPage,
-          page,
-          pageSize,
-          pageToken,
-          consistency,
-          ids,
-          credentialsIdentifier,
-          previewCredentialsIdentifierSimilar,
+          requestParameters.perPage,
+          requestParameters.page,
+          requestParameters.pageSize,
+          requestParameters.pageToken,
+          requestParameters.consistency,
+          requestParameters.ids,
+          requestParameters.credentialsIdentifier,
+          requestParameters.previewCredentialsIdentifierSimilar,
           options
         )
         .then((request) => request(axios, basePath));
@@ -9989,53 +10726,43 @@ export const IdentityApiFactory = function (
     /**
      * Returns a list of all identity schemas currently in use.
      * @summary Get all Identity Schemas
-     * @param {number} [perPage] Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
-     * @param {number} [page] Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
-     * @param {number} [pageSize] Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+     * @param {IdentityApiListIdentitySchemasRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listIdentitySchemas(
-      perPage?: number,
-      page?: number,
-      pageSize?: number,
-      pageToken?: string,
-      options?: any
+      requestParameters: IdentityApiListIdentitySchemasRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<Array<IdentitySchemaContainer>> {
       return localVarFp
-        .listIdentitySchemas(perPage, page, pageSize, pageToken, options)
+        .listIdentitySchemas(
+          requestParameters.perPage,
+          requestParameters.page,
+          requestParameters.pageSize,
+          requestParameters.pageToken,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint returns all sessions that belong to the given Identity.
      * @summary List an Identity\'s Sessions
-     * @param {string} id ID is the identity\&#39;s ID.
-     * @param {number} [perPage] Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
-     * @param {number} [page] Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
-     * @param {number} [pageSize] Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {boolean} [active] Active is a boolean flag that filters out sessions based on the state. If no value is provided, all sessions are returned.
+     * @param {IdentityApiListIdentitySessionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listIdentitySessions(
-      id: string,
-      perPage?: number,
-      page?: number,
-      pageSize?: number,
-      pageToken?: string,
-      active?: boolean,
-      options?: any
+      requestParameters: IdentityApiListIdentitySessionsRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<Array<Session>> {
       return localVarFp
         .listIdentitySessions(
-          id,
-          perPage,
-          page,
-          pageSize,
-          pageToken,
-          active,
+          requestParameters.id,
+          requestParameters.perPage,
+          requestParameters.page,
+          requestParameters.pageSize,
+          requestParameters.pageToken,
+          requestParameters.active,
           options
         )
         .then((request) => request(axios, basePath));
@@ -10043,60 +10770,469 @@ export const IdentityApiFactory = function (
     /**
      * Listing all sessions that exist.
      * @summary List All Sessions
-     * @param {number} [pageSize] Items per Page  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-     * @param {boolean} [active] Active is a boolean flag that filters out sessions based on the state. If no value is provided, all sessions are returned.
-     * @param {ListSessionsExpandEnum} [expand] ExpandOptions is a query parameter encoded list of all properties that must be expanded in the Session. If no value is provided, the expandable properties are skipped.
+     * @param {IdentityApiListSessionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listSessions(
-      pageSize?: number,
-      pageToken?: string,
-      active?: boolean,
-      expand?: ListSessionsExpandEnum,
-      options?: any
+      requestParameters: IdentityApiListSessionsRequest = {},
+      options?: AxiosRequestConfig
     ): AxiosPromise<Array<Session>> {
       return localVarFp
-        .listSessions(pageSize, pageToken, active, expand, options)
+        .listSessions(
+          requestParameters.pageSize,
+          requestParameters.pageToken,
+          requestParameters.active,
+          requestParameters.expand,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
      * Partially updates an [identity\'s](https://www.ory.sh/docs/kratos/concepts/identity-user-model) field using [JSON Patch](https://jsonpatch.com/). The fields `id`, `stateChangedAt` and `credentials` can not be updated using this method.
      * @summary Patch an Identity
-     * @param {string} id ID must be set to the ID of identity you want to update
-     * @param {Array<JsonPatch>} [body]
+     * @param {IdentityApiPatchIdentityRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     patchIdentity(
-      id: string,
-      body?: Array<JsonPatch>,
-      options?: any
+      requestParameters: IdentityApiPatchIdentityRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<Identity> {
       return localVarFp
-        .patchIdentity(id, body, options)
+        .patchIdentity(requestParameters.id, requestParameters.body, options)
         .then((request) => request(axios, basePath));
     },
     /**
      * This endpoint updates an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model). The full identity payload (except credentials) is expected. It is possible to update the identity\'s credentials as well.
      * @summary Update an Identity
-     * @param {string} id ID must be set to the ID of identity you want to update
-     * @param {UpdateIdentityBody} [body]
+     * @param {IdentityApiUpdateIdentityRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     updateIdentity(
-      id: string,
-      body?: UpdateIdentityBody,
-      options?: any
+      requestParameters: IdentityApiUpdateIdentityRequest,
+      options?: AxiosRequestConfig
     ): AxiosPromise<Identity> {
       return localVarFp
-        .updateIdentity(id, body, options)
+        .updateIdentity(requestParameters.id, requestParameters.body, options)
         .then((request) => request(axios, basePath));
     },
   };
 };
+
+/**
+ * Request parameters for batchPatchIdentities operation in IdentityApi.
+ * @export
+ * @interface IdentityApiBatchPatchIdentitiesRequest
+ */
+export interface IdentityApiBatchPatchIdentitiesRequest {
+  /**
+   *
+   * @type {PatchIdentitiesBody}
+   * @memberof IdentityApiBatchPatchIdentities
+   */
+  readonly body?: PatchIdentitiesBody;
+}
+
+/**
+ * Request parameters for createIdentity operation in IdentityApi.
+ * @export
+ * @interface IdentityApiCreateIdentityRequest
+ */
+export interface IdentityApiCreateIdentityRequest {
+  /**
+   *
+   * @type {CreateIdentityBody}
+   * @memberof IdentityApiCreateIdentity
+   */
+  readonly body?: CreateIdentityBody;
+}
+
+/**
+ * Request parameters for createRecoveryCodeForIdentity operation in IdentityApi.
+ * @export
+ * @interface IdentityApiCreateRecoveryCodeForIdentityRequest
+ */
+export interface IdentityApiCreateRecoveryCodeForIdentityRequest {
+  /**
+   *
+   * @type {CreateRecoveryCodeForIdentityBody}
+   * @memberof IdentityApiCreateRecoveryCodeForIdentity
+   */
+  readonly body?: CreateRecoveryCodeForIdentityBody;
+}
+
+/**
+ * Request parameters for createRecoveryLinkForIdentity operation in IdentityApi.
+ * @export
+ * @interface IdentityApiCreateRecoveryLinkForIdentityRequest
+ */
+export interface IdentityApiCreateRecoveryLinkForIdentityRequest {
+  /**
+   *
+   * @type {CreateRecoveryLinkForIdentityBody}
+   * @memberof IdentityApiCreateRecoveryLinkForIdentity
+   */
+  readonly body?: CreateRecoveryLinkForIdentityBody;
+}
+
+/**
+ * Request parameters for deleteIdentity operation in IdentityApi.
+ * @export
+ * @interface IdentityApiDeleteIdentityRequest
+ */
+export interface IdentityApiDeleteIdentityRequest {
+  /**
+   * ID is the identity\&#39;s ID.
+   * @type {string}
+   * @memberof IdentityApiDeleteIdentity
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for deleteIdentityCredentials operation in IdentityApi.
+ * @export
+ * @interface IdentityApiDeleteIdentityCredentialsRequest
+ */
+export interface IdentityApiDeleteIdentityCredentialsRequest {
+  /**
+   * ID is the identity\&#39;s ID.
+   * @type {string}
+   * @memberof IdentityApiDeleteIdentityCredentials
+   */
+  readonly id: string;
+
+  /**
+   * Type is the credential\&#39;s Type. One of totp, webauthn, lookup
+   * @type {'totp' | 'webauthn' | 'lookup'}
+   * @memberof IdentityApiDeleteIdentityCredentials
+   */
+  readonly type: DeleteIdentityCredentialsTypeEnum;
+}
+
+/**
+ * Request parameters for deleteIdentitySessions operation in IdentityApi.
+ * @export
+ * @interface IdentityApiDeleteIdentitySessionsRequest
+ */
+export interface IdentityApiDeleteIdentitySessionsRequest {
+  /**
+   * ID is the identity\&#39;s ID.
+   * @type {string}
+   * @memberof IdentityApiDeleteIdentitySessions
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for disableSession operation in IdentityApi.
+ * @export
+ * @interface IdentityApiDisableSessionRequest
+ */
+export interface IdentityApiDisableSessionRequest {
+  /**
+   * ID is the session\&#39;s ID.
+   * @type {string}
+   * @memberof IdentityApiDisableSession
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for extendSession operation in IdentityApi.
+ * @export
+ * @interface IdentityApiExtendSessionRequest
+ */
+export interface IdentityApiExtendSessionRequest {
+  /**
+   * ID is the session\&#39;s ID.
+   * @type {string}
+   * @memberof IdentityApiExtendSession
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getIdentity operation in IdentityApi.
+ * @export
+ * @interface IdentityApiGetIdentityRequest
+ */
+export interface IdentityApiGetIdentityRequest {
+  /**
+   * ID must be set to the ID of identity you want to get
+   * @type {string}
+   * @memberof IdentityApiGetIdentity
+   */
+  readonly id: string;
+
+  /**
+   * Include Credentials in Response  Include any credential, for example &#x60;password&#x60; or &#x60;oidc&#x60;, in the response. When set to &#x60;oidc&#x60;, This will return the initial OAuth 2.0 Access Token, OAuth 2.0 Refresh Token and the OpenID Connect ID Token if available.
+   * @type {Array<string>}
+   * @memberof IdentityApiGetIdentity
+   */
+  readonly includeCredential?: Array<string>;
+}
+
+/**
+ * Request parameters for getIdentitySchema operation in IdentityApi.
+ * @export
+ * @interface IdentityApiGetIdentitySchemaRequest
+ */
+export interface IdentityApiGetIdentitySchemaRequest {
+  /**
+   * ID must be set to the ID of schema you want to get
+   * @type {string}
+   * @memberof IdentityApiGetIdentitySchema
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSession operation in IdentityApi.
+ * @export
+ * @interface IdentityApiGetSessionRequest
+ */
+export interface IdentityApiGetSessionRequest {
+  /**
+   * ID is the session\&#39;s ID.
+   * @type {string}
+   * @memberof IdentityApiGetSession
+   */
+  readonly id: string;
+
+  /**
+   * ExpandOptions is a query parameter encoded list of all properties that must be expanded in the Session. Example - ?expand&#x3D;Identity&amp;expand&#x3D;Devices If no value is provided, the expandable properties are skipped.
+   * @type {Array<string>}
+   * @memberof IdentityApiGetSession
+   */
+  readonly expand?: GetSessionExpandEnum;
+}
+
+/**
+ * Request parameters for listIdentities operation in IdentityApi.
+ * @export
+ * @interface IdentityApiListIdentitiesRequest
+ */
+export interface IdentityApiListIdentitiesRequest {
+  /**
+   * Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
+   * @type {number}
+   * @memberof IdentityApiListIdentities
+   */
+  readonly perPage?: number;
+
+  /**
+   * Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
+   * @type {number}
+   * @memberof IdentityApiListIdentities
+   */
+  readonly page?: number;
+
+  /**
+   * Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {number}
+   * @memberof IdentityApiListIdentities
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {string}
+   * @memberof IdentityApiListIdentities
+   */
+  readonly pageToken?: string;
+
+  /**
+   * Read Consistency Level (preview)  The read consistency level determines the consistency guarantee for reads:  strong (slow): The read is guaranteed to return the most recent data committed at the start of the read. eventual (very fast): The result will return data that is about 4.8 seconds old.  The default consistency guarantee can be changed in the Ory Network Console or using the Ory CLI with &#x60;ory patch project --replace \&#39;/previews/default_read_consistency_level&#x3D;\&quot;strong\&quot;\&#39;&#x60;.  Setting the default consistency level to &#x60;eventual&#x60; may cause regressions in the future as we add consistency controls to more APIs. Currently, the following APIs will be affected by this setting:  &#x60;GET /admin/identities&#x60;  This feature is in preview and only available in Ory Network.  ConsistencyLevelUnset  ConsistencyLevelUnset is the unset / default consistency level. strong ConsistencyLevelStrong  ConsistencyLevelStrong is the strong consistency level. eventual ConsistencyLevelEventual  ConsistencyLevelEventual is the eventual consistency level using follower read timestamps.
+   * @type {'' | 'strong' | 'eventual'}
+   * @memberof IdentityApiListIdentities
+   */
+  readonly consistency?: ListIdentitiesConsistencyEnum;
+
+  /**
+   * List of ids used to filter identities. If this list is empty, then no filter will be applied.
+   * @type {Array<string>}
+   * @memberof IdentityApiListIdentities
+   */
+  readonly ids?: Array<string>;
+
+  /**
+   * CredentialsIdentifier is the identifier (username, email) of the credentials to look up using exact match. Only one of CredentialsIdentifier and CredentialsIdentifierSimilar can be used.
+   * @type {string}
+   * @memberof IdentityApiListIdentities
+   */
+  readonly credentialsIdentifier?: string;
+
+  /**
+   * This is an EXPERIMENTAL parameter that WILL CHANGE. Do NOT rely on consistent, deterministic behavior. THIS PARAMETER WILL BE REMOVED IN AN UPCOMING RELEASE WITHOUT ANY MIGRATION PATH.  CredentialsIdentifierSimilar is the (partial) identifier (username, email) of the credentials to look up using similarity search. Only one of CredentialsIdentifier and CredentialsIdentifierSimilar can be used.
+   * @type {string}
+   * @memberof IdentityApiListIdentities
+   */
+  readonly previewCredentialsIdentifierSimilar?: string;
+}
+
+/**
+ * Request parameters for listIdentitySchemas operation in IdentityApi.
+ * @export
+ * @interface IdentityApiListIdentitySchemasRequest
+ */
+export interface IdentityApiListIdentitySchemasRequest {
+  /**
+   * Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
+   * @type {number}
+   * @memberof IdentityApiListIdentitySchemas
+   */
+  readonly perPage?: number;
+
+  /**
+   * Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
+   * @type {number}
+   * @memberof IdentityApiListIdentitySchemas
+   */
+  readonly page?: number;
+
+  /**
+   * Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {number}
+   * @memberof IdentityApiListIdentitySchemas
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {string}
+   * @memberof IdentityApiListIdentitySchemas
+   */
+  readonly pageToken?: string;
+}
+
+/**
+ * Request parameters for listIdentitySessions operation in IdentityApi.
+ * @export
+ * @interface IdentityApiListIdentitySessionsRequest
+ */
+export interface IdentityApiListIdentitySessionsRequest {
+  /**
+   * ID is the identity\&#39;s ID.
+   * @type {string}
+   * @memberof IdentityApiListIdentitySessions
+   */
+  readonly id: string;
+
+  /**
+   * Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
+   * @type {number}
+   * @memberof IdentityApiListIdentitySessions
+   */
+  readonly perPage?: number;
+
+  /**
+   * Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
+   * @type {number}
+   * @memberof IdentityApiListIdentitySessions
+   */
+  readonly page?: number;
+
+  /**
+   * Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {number}
+   * @memberof IdentityApiListIdentitySessions
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {string}
+   * @memberof IdentityApiListIdentitySessions
+   */
+  readonly pageToken?: string;
+
+  /**
+   * Active is a boolean flag that filters out sessions based on the state. If no value is provided, all sessions are returned.
+   * @type {boolean}
+   * @memberof IdentityApiListIdentitySessions
+   */
+  readonly active?: boolean;
+}
+
+/**
+ * Request parameters for listSessions operation in IdentityApi.
+ * @export
+ * @interface IdentityApiListSessionsRequest
+ */
+export interface IdentityApiListSessionsRequest {
+  /**
+   * Items per Page  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {number}
+   * @memberof IdentityApiListSessions
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @type {string}
+   * @memberof IdentityApiListSessions
+   */
+  readonly pageToken?: string;
+
+  /**
+   * Active is a boolean flag that filters out sessions based on the state. If no value is provided, all sessions are returned.
+   * @type {boolean}
+   * @memberof IdentityApiListSessions
+   */
+  readonly active?: boolean;
+
+  /**
+   * ExpandOptions is a query parameter encoded list of all properties that must be expanded in the Session. If no value is provided, the expandable properties are skipped.
+   * @type {Array<string>}
+   * @memberof IdentityApiListSessions
+   */
+  readonly expand?: ListSessionsExpandEnum;
+}
+
+/**
+ * Request parameters for patchIdentity operation in IdentityApi.
+ * @export
+ * @interface IdentityApiPatchIdentityRequest
+ */
+export interface IdentityApiPatchIdentityRequest {
+  /**
+   * ID must be set to the ID of identity you want to update
+   * @type {string}
+   * @memberof IdentityApiPatchIdentity
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {Array<JsonPatch>}
+   * @memberof IdentityApiPatchIdentity
+   */
+  readonly body?: Array<JsonPatch>;
+}
+
+/**
+ * Request parameters for updateIdentity operation in IdentityApi.
+ * @export
+ * @interface IdentityApiUpdateIdentityRequest
+ */
+export interface IdentityApiUpdateIdentityRequest {
+  /**
+   * ID must be set to the ID of identity you want to update
+   * @type {string}
+   * @memberof IdentityApiUpdateIdentity
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateIdentityBody}
+   * @memberof IdentityApiUpdateIdentity
+   */
+  readonly body?: UpdateIdentityBody;
+}
 
 /**
  * IdentityApi - object-oriented interface
@@ -10108,234 +11244,237 @@ export class IdentityApi extends BaseAPI {
   /**
    * Creates or delete multiple [identities](https://www.ory.sh/docs/kratos/concepts/identity-user-model). This endpoint can also be used to [import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities) for instance passwords, social sign in configurations or multifactor methods.
    * @summary Create and deletes multiple identities
-   * @param {PatchIdentitiesBody} [body]
+   * @param {IdentityApiBatchPatchIdentitiesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public batchPatchIdentities(
-    body?: PatchIdentitiesBody,
+    requestParameters: IdentityApiBatchPatchIdentitiesRequest = {},
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .batchPatchIdentities(body, options)
+      .batchPatchIdentities(requestParameters.body, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Create an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model).  This endpoint can also be used to [import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities) for instance passwords, social sign in configurations or multifactor methods.
    * @summary Create an Identity
-   * @param {CreateIdentityBody} [body]
+   * @param {IdentityApiCreateIdentityRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public createIdentity(
-    body?: CreateIdentityBody,
+    requestParameters: IdentityApiCreateIdentityRequest = {},
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .createIdentity(body, options)
+      .createIdentity(requestParameters.body, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint creates a recovery code which should be given to the user in order for them to recover (or activate) their account.
    * @summary Create a Recovery Code
-   * @param {CreateRecoveryCodeForIdentityBody} [body]
+   * @param {IdentityApiCreateRecoveryCodeForIdentityRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public createRecoveryCodeForIdentity(
-    body?: CreateRecoveryCodeForIdentityBody,
+    requestParameters: IdentityApiCreateRecoveryCodeForIdentityRequest = {},
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .createRecoveryCodeForIdentity(body, options)
+      .createRecoveryCodeForIdentity(requestParameters.body, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint creates a recovery link which should be given to the user in order for them to recover (or activate) their account.
    * @summary Create a Recovery Link
-   * @param {CreateRecoveryLinkForIdentityBody} [body]
+   * @param {IdentityApiCreateRecoveryLinkForIdentityRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public createRecoveryLinkForIdentity(
-    body?: CreateRecoveryLinkForIdentityBody,
+    requestParameters: IdentityApiCreateRecoveryLinkForIdentityRequest = {},
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .createRecoveryLinkForIdentity(body, options)
+      .createRecoveryLinkForIdentity(requestParameters.body, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Calling this endpoint irrecoverably and permanently deletes the [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) given its ID. This action can not be undone. This endpoint returns 204 when the identity was deleted or when the identity was not found, in which case it is assumed that is has been deleted already.
    * @summary Delete an Identity
-   * @param {string} id ID is the identity\&#39;s ID.
+   * @param {IdentityApiDeleteIdentityRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
-  public deleteIdentity(id: string, options?: AxiosRequestConfig) {
+  public deleteIdentity(
+    requestParameters: IdentityApiDeleteIdentityRequest,
+    options?: AxiosRequestConfig
+  ) {
     return IdentityApiFp(this.configuration)
-      .deleteIdentity(id, options)
+      .deleteIdentity(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Delete an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) credential by its type You can only delete second factor (aal2) credentials.
    * @summary Delete a credential for a specific identity
-   * @param {string} id ID is the identity\&#39;s ID.
-   * @param {DeleteIdentityCredentialsTypeEnum} type Type is the credential\&#39;s Type. One of totp, webauthn, lookup
+   * @param {IdentityApiDeleteIdentityCredentialsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public deleteIdentityCredentials(
-    id: string,
-    type: DeleteIdentityCredentialsTypeEnum,
+    requestParameters: IdentityApiDeleteIdentityCredentialsRequest,
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .deleteIdentityCredentials(id, type, options)
+      .deleteIdentityCredentials(
+        requestParameters.id,
+        requestParameters.type,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Calling this endpoint irrecoverably and permanently deletes and invalidates all sessions that belong to the given Identity.
    * @summary Delete & Invalidate an Identity\'s Sessions
-   * @param {string} id ID is the identity\&#39;s ID.
+   * @param {IdentityApiDeleteIdentitySessionsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
-  public deleteIdentitySessions(id: string, options?: AxiosRequestConfig) {
+  public deleteIdentitySessions(
+    requestParameters: IdentityApiDeleteIdentitySessionsRequest,
+    options?: AxiosRequestConfig
+  ) {
     return IdentityApiFp(this.configuration)
-      .deleteIdentitySessions(id, options)
+      .deleteIdentitySessions(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Calling this endpoint deactivates the specified session. Session data is not deleted.
    * @summary Deactivate a Session
-   * @param {string} id ID is the session\&#39;s ID.
+   * @param {IdentityApiDisableSessionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
-  public disableSession(id: string, options?: AxiosRequestConfig) {
+  public disableSession(
+    requestParameters: IdentityApiDisableSessionRequest,
+    options?: AxiosRequestConfig
+  ) {
     return IdentityApiFp(this.configuration)
-      .disableSession(id, options)
+      .disableSession(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Calling this endpoint extends the given session ID. If `session.earliest_possible_extend` is set it will only extend the session after the specified time has passed.  Retrieve the session ID from the `/sessions/whoami` endpoint / `toSession` SDK method.
    * @summary Extend a Session
-   * @param {string} id ID is the session\&#39;s ID.
+   * @param {IdentityApiExtendSessionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
-  public extendSession(id: string, options?: AxiosRequestConfig) {
+  public extendSession(
+    requestParameters: IdentityApiExtendSessionRequest,
+    options?: AxiosRequestConfig
+  ) {
     return IdentityApiFp(this.configuration)
-      .extendSession(id, options)
+      .extendSession(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Return an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) by its ID. You can optionally include credentials (e.g. social sign in connections) in the response by using the `include_credential` query parameter.
    * @summary Get an Identity
-   * @param {string} id ID must be set to the ID of identity you want to get
-   * @param {Array<string>} [includeCredential] Include Credentials in Response  Include any credential, for example &#x60;password&#x60; or &#x60;oidc&#x60;, in the response. When set to &#x60;oidc&#x60;, This will return the initial OAuth 2.0 Access Token, OAuth 2.0 Refresh Token and the OpenID Connect ID Token if available.
+   * @param {IdentityApiGetIdentityRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public getIdentity(
-    id: string,
-    includeCredential?: Array<string>,
+    requestParameters: IdentityApiGetIdentityRequest,
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .getIdentity(id, includeCredential, options)
+      .getIdentity(
+        requestParameters.id,
+        requestParameters.includeCredential,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Return a specific identity schema.
    * @summary Get Identity JSON Schema
-   * @param {string} id ID must be set to the ID of schema you want to get
+   * @param {IdentityApiGetIdentitySchemaRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
-  public getIdentitySchema(id: string, options?: AxiosRequestConfig) {
+  public getIdentitySchema(
+    requestParameters: IdentityApiGetIdentitySchemaRequest,
+    options?: AxiosRequestConfig
+  ) {
     return IdentityApiFp(this.configuration)
-      .getIdentitySchema(id, options)
+      .getIdentitySchema(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint is useful for:  Getting a session object with all specified expandables that exist in an administrative context.
    * @summary Get Session
-   * @param {string} id ID is the session\&#39;s ID.
-   * @param {GetSessionExpandEnum} [expand] ExpandOptions is a query parameter encoded list of all properties that must be expanded in the Session. Example - ?expand&#x3D;Identity&amp;expand&#x3D;Devices If no value is provided, the expandable properties are skipped.
+   * @param {IdentityApiGetSessionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public getSession(
-    id: string,
-    expand?: GetSessionExpandEnum,
+    requestParameters: IdentityApiGetSessionRequest,
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .getSession(id, expand, options)
+      .getSession(requestParameters.id, requestParameters.expand, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Lists all [identities](https://www.ory.sh/docs/kratos/concepts/identity-user-model) in the system.
    * @summary List Identities
-   * @param {number} [perPage] Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
-   * @param {number} [page] Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
-   * @param {number} [pageSize] Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {ListIdentitiesConsistencyEnum} [consistency] Read Consistency Level (preview)  The read consistency level determines the consistency guarantee for reads:  strong (slow): The read is guaranteed to return the most recent data committed at the start of the read. eventual (very fast): The result will return data that is about 4.8 seconds old.  The default consistency guarantee can be changed in the Ory Network Console or using the Ory CLI with &#x60;ory patch project --replace \&#39;/previews/default_read_consistency_level&#x3D;\&quot;strong\&quot;\&#39;&#x60;.  Setting the default consistency level to &#x60;eventual&#x60; may cause regressions in the future as we add consistency controls to more APIs. Currently, the following APIs will be affected by this setting:  &#x60;GET /admin/identities&#x60;  This feature is in preview and only available in Ory Network.  ConsistencyLevelUnset  ConsistencyLevelUnset is the unset / default consistency level. strong ConsistencyLevelStrong  ConsistencyLevelStrong is the strong consistency level. eventual ConsistencyLevelEventual  ConsistencyLevelEventual is the eventual consistency level using follower read timestamps.
-   * @param {Array<string>} [ids] List of ids used to filter identities. If this list is empty, then no filter will be applied.
-   * @param {string} [credentialsIdentifier] CredentialsIdentifier is the identifier (username, email) of the credentials to look up using exact match. Only one of CredentialsIdentifier and CredentialsIdentifierSimilar can be used.
-   * @param {string} [previewCredentialsIdentifierSimilar] This is an EXPERIMENTAL parameter that WILL CHANGE. Do NOT rely on consistent, deterministic behavior. THIS PARAMETER WILL BE REMOVED IN AN UPCOMING RELEASE WITHOUT ANY MIGRATION PATH.  CredentialsIdentifierSimilar is the (partial) identifier (username, email) of the credentials to look up using similarity search. Only one of CredentialsIdentifier and CredentialsIdentifierSimilar can be used.
+   * @param {IdentityApiListIdentitiesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public listIdentities(
-    perPage?: number,
-    page?: number,
-    pageSize?: number,
-    pageToken?: string,
-    consistency?: ListIdentitiesConsistencyEnum,
-    ids?: Array<string>,
-    credentialsIdentifier?: string,
-    previewCredentialsIdentifierSimilar?: string,
+    requestParameters: IdentityApiListIdentitiesRequest = {},
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
       .listIdentities(
-        perPage,
-        page,
-        pageSize,
-        pageToken,
-        consistency,
-        ids,
-        credentialsIdentifier,
-        previewCredentialsIdentifierSimilar,
+        requestParameters.perPage,
+        requestParameters.page,
+        requestParameters.pageSize,
+        requestParameters.pageToken,
+        requestParameters.consistency,
+        requestParameters.ids,
+        requestParameters.credentialsIdentifier,
+        requestParameters.previewCredentialsIdentifierSimilar,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -10344,56 +11483,46 @@ export class IdentityApi extends BaseAPI {
   /**
    * Returns a list of all identity schemas currently in use.
    * @summary Get all Identity Schemas
-   * @param {number} [perPage] Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
-   * @param {number} [page] Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
-   * @param {number} [pageSize] Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
+   * @param {IdentityApiListIdentitySchemasRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public listIdentitySchemas(
-    perPage?: number,
-    page?: number,
-    pageSize?: number,
-    pageToken?: string,
+    requestParameters: IdentityApiListIdentitySchemasRequest = {},
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .listIdentitySchemas(perPage, page, pageSize, pageToken, options)
+      .listIdentitySchemas(
+        requestParameters.perPage,
+        requestParameters.page,
+        requestParameters.pageSize,
+        requestParameters.pageToken,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint returns all sessions that belong to the given Identity.
    * @summary List an Identity\'s Sessions
-   * @param {string} id ID is the identity\&#39;s ID.
-   * @param {number} [perPage] Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page.
-   * @param {number} [page] Deprecated Pagination Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This value is currently an integer, but it is not sequential. The value is not the page number, but a reference. The next page can be any number and some numbers might return an empty list.  For example, page 2 might not follow after page 1. And even if page 3 and 5 exist, but page 4 might not exist. The first page can be retrieved by omitting this parameter. Following page pointers will be returned in the &#x60;Link&#x60; header.
-   * @param {number} [pageSize] Page Size  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {boolean} [active] Active is a boolean flag that filters out sessions based on the state. If no value is provided, all sessions are returned.
+   * @param {IdentityApiListIdentitySessionsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public listIdentitySessions(
-    id: string,
-    perPage?: number,
-    page?: number,
-    pageSize?: number,
-    pageToken?: string,
-    active?: boolean,
+    requestParameters: IdentityApiListIdentitySessionsRequest,
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
       .listIdentitySessions(
-        id,
-        perPage,
-        page,
-        pageSize,
-        pageToken,
-        active,
+        requestParameters.id,
+        requestParameters.perPage,
+        requestParameters.page,
+        requestParameters.pageSize,
+        requestParameters.pageToken,
+        requestParameters.active,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -10402,61 +11531,57 @@ export class IdentityApi extends BaseAPI {
   /**
    * Listing all sessions that exist.
    * @summary List All Sessions
-   * @param {number} [pageSize] Items per Page  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {string} [pageToken] Next Page Token  The next page token. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination).
-   * @param {boolean} [active] Active is a boolean flag that filters out sessions based on the state. If no value is provided, all sessions are returned.
-   * @param {ListSessionsExpandEnum} [expand] ExpandOptions is a query parameter encoded list of all properties that must be expanded in the Session. If no value is provided, the expandable properties are skipped.
+   * @param {IdentityApiListSessionsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public listSessions(
-    pageSize?: number,
-    pageToken?: string,
-    active?: boolean,
-    expand?: ListSessionsExpandEnum,
+    requestParameters: IdentityApiListSessionsRequest = {},
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .listSessions(pageSize, pageToken, active, expand, options)
+      .listSessions(
+        requestParameters.pageSize,
+        requestParameters.pageToken,
+        requestParameters.active,
+        requestParameters.expand,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * Partially updates an [identity\'s](https://www.ory.sh/docs/kratos/concepts/identity-user-model) field using [JSON Patch](https://jsonpatch.com/). The fields `id`, `stateChangedAt` and `credentials` can not be updated using this method.
    * @summary Patch an Identity
-   * @param {string} id ID must be set to the ID of identity you want to update
-   * @param {Array<JsonPatch>} [body]
+   * @param {IdentityApiPatchIdentityRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public patchIdentity(
-    id: string,
-    body?: Array<JsonPatch>,
+    requestParameters: IdentityApiPatchIdentityRequest,
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .patchIdentity(id, body, options)
+      .patchIdentity(requestParameters.id, requestParameters.body, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    * This endpoint updates an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model). The full identity payload (except credentials) is expected. It is possible to update the identity\'s credentials as well.
    * @summary Update an Identity
-   * @param {string} id ID must be set to the ID of identity you want to update
-   * @param {UpdateIdentityBody} [body]
+   * @param {IdentityApiUpdateIdentityRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof IdentityApi
    */
   public updateIdentity(
-    id: string,
-    body?: UpdateIdentityBody,
+    requestParameters: IdentityApiUpdateIdentityRequest,
     options?: AxiosRequestConfig
   ) {
     return IdentityApiFp(this.configuration)
-      .updateIdentity(id, body, options)
+      .updateIdentity(requestParameters.id, requestParameters.body, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -10594,7 +11719,7 @@ export const VersionApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getVersion(options?: any): AxiosPromise<Version> {
+    getVersion(options?: AxiosRequestConfig): AxiosPromise<Version> {
       return localVarFp
         .getVersion(options)
         .then((request) => request(axios, basePath));
