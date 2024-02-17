@@ -1,6 +1,6 @@
 {
   "name": "@itsziroy/kratos-client",
-  "version": "v1.1.1",
+  "version": "v1.2.0",
   "description": "OpenAPI client for @ory/kratos-client",
   "keywords": [
     "axios",
@@ -18,6 +18,7 @@
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
+    "generate": "openapi-generator generate -i api.json -g typescript-axios -o . --config ./config/ts.yml",
     "build": "tsc --outDir dist/",
     "prepare": "npm run build"
   },
